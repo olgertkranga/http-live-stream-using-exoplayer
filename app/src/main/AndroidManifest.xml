@@ -11,7 +11,7 @@
 
 
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.kunalbhatia.oleg.MainActivity">
+        <activity android:name="com.example.oleg.exoplayer.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

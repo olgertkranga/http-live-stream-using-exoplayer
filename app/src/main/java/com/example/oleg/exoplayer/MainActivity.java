@@ -1,4 +1,4 @@
-package com.example.kunalbhatia.oleg;
+package com.example.oleg.exoplayer;
 
 import android.content.Context;
 import android.media.AudioManager;

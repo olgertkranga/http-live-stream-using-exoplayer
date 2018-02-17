@@ -1,4 +1,4 @@
-package com.example.kunalbhatia.exoplayer;
+package com.example.oleg.exoplayer;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
