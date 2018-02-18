@@ -72,7 +72,13 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
         btn_pause.setOnClickListener(this); // we init buttons and listners
         player = ExoPlayer.Factory.newInstance(2);
         playerControl = new PlayerControl(player); // we init player
+
+
+        ///
         video_url = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8"; //video url
+
+
+
         am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE); // for requesting audio
         mainHandler = new Handler(); //handler required for hls
         userAgent = Util.getUserAgent(this, "MainActivity"); //useragent required for hls
@@ -134,10 +140,7 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
     public void onSingleManifestError(IOException e) {
 
     }
-    // I'll upload this code on drive then just extarct it and understand ok
-    //lets check
-    // also watch my videos with my daughter
-    //thanks!!!
+
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         String text = "";

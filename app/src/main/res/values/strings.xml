@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">Live Stream</string>
+    <string name="app_name">Live Stream 4</string>
     <string name="txt_play">Play</string>
     <string name="txt_pause">Pause</string>
     <string name="some_info">Some information</string>
     <string name="linktosite">
-
-<a href="https://github.com/olgertkranga/http-live-stream-using-exoplayer">My GitHub</a>
-
+<a href="https://github.com/olgertkranga/http-live-stream-using-exoplayer">My GitHub for test project Live Stream</a>
     </string>
+    <string name="info_version">Live Stream mobile application, version 10001</string>
 </resources>
