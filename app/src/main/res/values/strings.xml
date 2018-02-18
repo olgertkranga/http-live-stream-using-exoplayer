@@ -3,4 +3,9 @@
     <string name="txt_play">Play</string>
     <string name="txt_pause">Pause</string>
     <string name="some_info">Some information</string>
+    <string name="linktosite">
+
+<a href="https://github.com/olgertkranga/http-live-stream-using-exoplayer">My GitHub</a>
+
+    </string>
 </resources>
