@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
         //TOKEN
         if (id == R.id.some_info) {
             Toast.makeText(getApplicationContext(), "some information about the app", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            Intent i = new Intent(getApplicationContext(), InformationActivity.class);
             startActivity(i);
             return true;
         }
