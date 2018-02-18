@@ -2,4 +2,5 @@
     <string name="app_name">Live Stream</string>
     <string name="txt_play">Play</string>
     <string name="txt_pause">Pause</string>
+    <string name="some_info">Some information</string>
 </resources>
