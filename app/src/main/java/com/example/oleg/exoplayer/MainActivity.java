@@ -38,8 +38,12 @@ import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 import com.google.android.exoplayer.util.ManifestFetcher;
 import com.google.android.exoplayer.util.PlayerControl;
 import com.google.android.exoplayer.util.Util;
+import com.google.android.gms.cast.framework.CastOptions;
+import com.google.android.gms.cast.framework.OptionsProvider;
+import com.google.android.gms.cast.framework.SessionProvider;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ManifestFetcher.ManifestCallback<HlsPlaylist>,
         ExoPlayer.Listener,HlsSampleSource.EventListener, AudioManager.OnAudioFocusChangeListener, View.OnClickListener {
@@ -73,9 +77,12 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
         player = ExoPlayer.Factory.newInstance(2);
         playerControl = new PlayerControl(player); // we init player
 
-
+        //https://developer.apple.com/videos/play/wwdc2017/504/
+        video_url = "http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8"; //video url
         ///
-        video_url = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8"; //video url
+        //video_url = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8"; //video url
+        //1.http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8
+        //2.http://hls.ksl.com/t/KSL_NEWSRADIO/playlist.m3u8
 
 
 
@@ -83,8 +90,14 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
         mainHandler = new Handler(); //handler required for hls
         userAgent = Util.getUserAgent(this, "MainActivity"); //useragent required for hls
         HlsPlaylistParser parser = new HlsPlaylistParser(); // init HlsPlaylistParser
+
+
+
         playlistFetcher = new ManifestFetcher<>(video_url, new DefaultUriDataSource(this, userAgent),
                 parser); // url goes here, useragent and parser
+
+
+
         playlistFetcher.singleLoad(mainHandler.getLooper(), this); //with 'this' we'll implement ManifestFetcher.ManifestCallback<HlsPlaylist>
         //listener with it will come two functions
     }
@@ -253,5 +266,21 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
 
         return super.onOptionsItemSelected(item);
     }
+
+    ///
+    /*
+    class CastOptionsProvider implements OptionsProvider {
+        @Override
+        public CastOptions getCastOptions(Context context) {
+            CastOptions castOptions = new CastOptions.Builder()
+                    .setReceiverApplicationId(context.getString(R.string.app_id))
+                    .build();
+            return castOptions;
+        }
+        @Override
+        public List<SessionProvider> getAdditionalSessionProviders(Context context) {
+            return null;
+        }
+    }*/
 
 }
