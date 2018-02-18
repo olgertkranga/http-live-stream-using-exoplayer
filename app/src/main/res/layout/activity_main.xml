@@ -64,15 +64,42 @@
 
         <com.google.android.exoplayer.AspectRatioFrameLayout android:id="@+id/video_frame"
             android:layout_width="fill_parent"
-            android:layout_height="300dp"
+            android:layout_height="350dp"
             android:layout_gravity="center"
             android:foregroundGravity="center">
 
             <SurfaceView android:id="@+id/surface_view"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="350dp"
                 android:layout_gravity="center"/>
 
         </com.google.android.exoplayer.AspectRatioFrameLayout>
+
+        <Button
+            android:id="@+id/btn_two"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/btn_left"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/btns"
+            android:layout_marginLeft="90.5dp"
+            android:text="LEFT" />
+
+        <Button
+            android:id="@+id/btn_three"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/btn_right"
+            android:layout_alignParentTop="true"
+            android:layout_below="@+id/btns"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="170.5dp"
+            android:layout_marginTop="-49dp"
+            android:text="RIGHT" />
+
     </LinearLayout>
+
 </RelativeLayout>
