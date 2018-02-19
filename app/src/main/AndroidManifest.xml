@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".InformationActivity"></activity>
+        <activity android:name=".CanalActivity"></activity>
     </application>
 
 </manifest>

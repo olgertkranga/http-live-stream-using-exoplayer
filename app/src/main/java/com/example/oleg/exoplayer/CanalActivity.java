@@ -39,14 +39,10 @@ import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 import com.google.android.exoplayer.util.ManifestFetcher;
 import com.google.android.exoplayer.util.PlayerControl;
 import com.google.android.exoplayer.util.Util;
-import com.google.android.gms.cast.framework.CastOptions;
-import com.google.android.gms.cast.framework.OptionsProvider;
-import com.google.android.gms.cast.framework.SessionProvider;
 
 import java.io.IOException;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ManifestFetcher.ManifestCallback<HlsPlaylist>,
+public class CanalActivity extends AppCompatActivity implements ManifestFetcher.ManifestCallback<HlsPlaylist>,
         ExoPlayer.Listener,HlsSampleSource.EventListener, AudioManager.OnAudioFocusChangeListener, View.OnClickListener {
 
     private SurfaceView surface;
@@ -65,12 +61,6 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
     private TrackRenderer videoRenderer;
     private MediaCodecAudioTrackRenderer audioRenderer;
 
-    private static String startUrl;
-
-    static {
-        startUrl = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8";
-    }
-
     public int regulator;
 
     Activity activity;
@@ -78,14 +68,16 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_canal);
 
         activity=this;
 
         //Toast.makeText(getApplicationContext(), "You Selected " + String.valueOf(regulator), Toast.LENGTH_SHORT).show();
 
+        Intent intent = getIntent();
+        String leftRightStr = intent.getExtras().getString("lrStr");
 
-        playExoPlayer(startUrl);
+        playExoPlayer(leftRightStr);
 
 
 /*
@@ -110,8 +102,7 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
         playlistFetcher = new ManifestFetcher<>(video_url, new DefaultUriDataSource(this, userAgent),
                 parser); // url goes here, useragent and parser
         playlistFetcher.singleLoad(mainHandler.getLooper(), this); //with 'this' we'll implement ManifestFetcher.ManifestCallback<HlsPlaylist>
-        */
-
+*/
 
         //listener with it will come two functions
         ///btn_left
@@ -182,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
     }
     public boolean requestFocus() {
         return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
-                am.requestAudioFocus(MainActivity.this, AudioManager.STREAM_MUSIC,
+                am.requestAudioFocus(CanalActivity.this, AudioManager.STREAM_MUSIC,
                         AudioManager.AUDIOFOCUS_GAIN);
     }
     private void pushSurface(boolean blockForSurfacePush) {
@@ -335,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
         //2.http://hls.ksl.com/t/KSL_NEWSRADIO/playlist.m3u8
         am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE); // for requesting audio
         mainHandler = new Handler(); //handler required for hls
-        userAgent = Util.getUserAgent(this, "MainActivity"); //useragent required for hls
+        userAgent = Util.getUserAgent(this, "CanalActivity"); //useragent required for hls
         HlsPlaylistParser parser = new HlsPlaylistParser(); // init HlsPlaylistParser
         playlistFetcher = new ManifestFetcher<>(video_url, new DefaultUriDataSource(this, userAgent),
                 parser); // url goes here, useragent and parser
