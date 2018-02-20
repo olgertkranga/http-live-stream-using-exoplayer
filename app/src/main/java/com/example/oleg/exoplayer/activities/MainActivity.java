@@ -1,13 +1,16 @@
-package com.example.oleg.exoplayer;
+package com.example.oleg.exoplayer.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaCodec;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
@@ -16,6 +19,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.oleg.exoplayer.R;
+import com.example.oleg.exoplayer.internet.HttpHandler;
 import com.google.android.exoplayer.DefaultLoadControl;
 import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
@@ -40,9 +45,13 @@ import com.google.android.exoplayer.util.ManifestFetcher;
 import com.google.android.exoplayer.util.PlayerControl;
 import com.google.android.exoplayer.util.Util;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
-public class CanalActivity extends AppCompatActivity implements ManifestFetcher.ManifestCallback<HlsPlaylist>,
+public class MainActivity extends AppCompatActivity implements ManifestFetcher.ManifestCallback<HlsPlaylist>,
         ExoPlayer.Listener,HlsSampleSource.EventListener, AudioManager.OnAudioFocusChangeListener, View.OnClickListener {
 
     private SurfaceView surface;
@@ -61,48 +70,32 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
     private TrackRenderer videoRenderer;
     private MediaCodecAudioTrackRenderer audioRenderer;
 
+    private static String startUrl;
+
+    //FROM LOCALHOST WEB SERVER YET
+    static {
+        startUrl = "http://192.168.0.12/ambrite/jsons/default_chanel.json";
+        //startUrl = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8";
+    }
+
     public int regulator;
 
     Activity activity;
 
+    private String TAG = MainActivity.class.getSimpleName();
+
+    private ProgressDialog pDialog;
+
+    public String defChanelStr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_canal);
+        setContentView(R.layout.activity_main);
 
         activity=this;
 
-        //Toast.makeText(getApplicationContext(), "You Selected " + String.valueOf(regulator), Toast.LENGTH_SHORT).show();
-
-        Intent intent = getIntent();
-        String leftRightStr = intent.getExtras().getString("lrStr");
-
-        playExoPlayer(leftRightStr);
-
-
-/*
-        surface = (SurfaceView) findViewById(R.id.surface_view); // we import surface
-        txt_playState = (TextView) findViewById(R.id.txt_playstate);
-        btn_play = (Button) findViewById(R.id.btn_play);
-        btn_pause = (Button) findViewById(R.id.btn_pause);
-        btn_play.setOnClickListener(this);
-        btn_pause.setOnClickListener(this); // we init buttons and listners
-        player = ExoPlayer.Factory.newInstance(2);
-        playerControl = new PlayerControl(player); // we init player
-        //https://developer.apple.com/videos/play/wwdc2017/504/
-        video_url = "http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8"; //video url
-        ///
-        //video_url = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8"; //video url
-        //1.http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8
-        //2.http://hls.ksl.com/t/KSL_NEWSRADIO/playlist.m3u8
-        am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE); // for requesting audio
-        mainHandler = new Handler(); //handler required for hls
-        userAgent = Util.getUserAgent(this, "MainActivity"); //useragent required for hls
-        HlsPlaylistParser parser = new HlsPlaylistParser(); // init HlsPlaylistParser
-        playlistFetcher = new ManifestFetcher<>(video_url, new DefaultUriDataSource(this, userAgent),
-                parser); // url goes here, useragent and parser
-        playlistFetcher.singleLoad(mainHandler.getLooper(), this); //with 'this' we'll implement ManifestFetcher.ManifestCallback<HlsPlaylist>
-*/
+        new GetContacts().execute();
 
         //listener with it will come two functions
         ///btn_left
@@ -112,11 +105,9 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
             @Override
             public void onClick(View v) {
 
-                String leftStr  = "http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8";
+                startUrl = "http://192.168.0.12/ambrite/jsons/default_chanelLeft.json";
 
-                Intent i = new Intent(getApplicationContext(), CanalActivity.class);
-                i.putExtra("lrStr", leftStr);
-                startActivity(i);
+                new GetContacts().execute();
 
             }
         });
@@ -129,11 +120,9 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
             @Override
             public void onClick(View v) {
 
-                String leftStr  = "http://hls.ksl.com/t/KSL_NEWSRADIO/playlist.m3u8";
+                startUrl = "http://192.168.0.12/ambrite/jsons/default_chanelRight.json";
 
-                Intent i = new Intent(getApplicationContext(), CanalActivity.class);
-                i.putExtra("lrStr", leftStr);
-                startActivity(i);
+                new GetContacts().execute();
 
             }
         });
@@ -173,7 +162,7 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
     }
     public boolean requestFocus() {
         return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
-                am.requestAudioFocus(CanalActivity.this, AudioManager.STREAM_MUSIC,
+                am.requestAudioFocus(MainActivity.this, AudioManager.STREAM_MUSIC,
                         AudioManager.AUDIOFOCUS_GAIN);
     }
     private void pushSurface(boolean blockForSurfacePush) {
@@ -326,7 +315,7 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
         //2.http://hls.ksl.com/t/KSL_NEWSRADIO/playlist.m3u8
         am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE); // for requesting audio
         mainHandler = new Handler(); //handler required for hls
-        userAgent = Util.getUserAgent(this, "CanalActivity"); //useragent required for hls
+        userAgent = Util.getUserAgent(this, "MainActivity"); //useragent required for hls
         HlsPlaylistParser parser = new HlsPlaylistParser(); // init HlsPlaylistParser
         playlistFetcher = new ManifestFetcher<>(video_url, new DefaultUriDataSource(this, userAgent),
                 parser); // url goes here, useragent and parser
@@ -352,6 +341,102 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
 
     public int getReg(int i) {
         return i;
+    }
+
+    /**
+     * Async task class to get json by making HTTP call
+     */
+    private class GetContacts extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+
+            // Making a request to url and getting response
+            String jsonStr = sh.makeServiceCall(startUrl);
+
+            String defaultChanelStr = null;
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting JSON Array node
+                    JSONArray chanel = jsonObj.getJSONArray("chanel");
+
+                    
+                    // looping through All Contacts
+                    //for (int i = 0; i < chanel.length(); i++) {
+                        JSONObject c = chanel.getJSONObject(0);
+
+                        defaultChanelStr = c.getString("defaultChanelStr");
+
+                    Intent i = new Intent(getApplicationContext(), CanalActivity.class);
+                    i.putExtra("lrStr", defaultChanelStr);
+                    startActivity(i);
+
+                        //defChanelStr = defaultChanelStr;
+                        //playExoPlayer(defaultChanelStr);
+
+                        //db.addCountry(country);
+                    //}
+
+                    //playExoPlayer(defaultChanelStr);
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+
+
+            super.onPostExecute(result);
+            // Dismiss the progress dialog
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+        }
+
     }
 
 }

@@ -1,10 +1,11 @@
-package com.example.oleg.exoplayer;
+package com.example.oleg.exoplayer.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
+
+import com.example.oleg.exoplayer.R;
 
 public class InformationActivity extends AppCompatActivity {
 
