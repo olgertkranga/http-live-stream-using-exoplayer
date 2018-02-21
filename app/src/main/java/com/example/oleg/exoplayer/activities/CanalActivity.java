@@ -78,6 +78,10 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
 
     private static String startUrl;
 
+    private int regulator;
+
+    private int cLength;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +91,12 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
 
         Intent intent = getIntent();
         String leftRightStr = intent.getExtras().getString("lrStr");
+        regulator = Integer.valueOf(intent.getExtras().getString("regulatorStr"));
+        cLength = Integer.valueOf(intent.getExtras().getString("chanelLength"));
 
         playExoPlayer(leftRightStr);
+
+        startUrl = new MainActivity().startUrl;
 
         btn_left=(Button)findViewById(R.id.btn_left);
         btn_left.setOnClickListener(new View.OnClickListener() {
@@ -96,13 +104,16 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
             @Override
             public void onClick(View v) {
 
-                startUrl = "http://192.168.0.12/ambrite/jsons/default_chanelLeft.json";
+                if (regulator > 0) {
+                    regulator--;
+                } else {
+                    regulator=0;
+                }
 
                 new GetContacts().execute();
 
             }
         });
-
 
         ///btn_right
         btn_right=(Button)findViewById(R.id.btn_right);
@@ -111,7 +122,11 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
             @Override
             public void onClick(View v) {
 
-                startUrl = "http://192.168.0.12/ambrite/jsons/default_chanelRight.json";
+                if (regulator == cLength) {
+                    regulator = cLength;
+                } else {
+                    regulator++;
+                }
 
                 new GetContacts().execute();
 
@@ -130,7 +145,6 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
         if (manifest instanceof HlsMasterPlaylist) {
             HlsMasterPlaylist masterPlaylist = (HlsMasterPlaylist) manifest;
             haveSubtitles = !masterPlaylist.subtitles.isEmpty();
-
         }
         // Build the video/id3 renderers.
         DataSource dataSource = new DefaultUriDataSource(this, bandwidthMeter, userAgent);
@@ -258,8 +272,6 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
         //for play and pause
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -298,12 +310,6 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
 
         video_url = video_urlStr;
 
-        //https://developer.apple.com/videos/play/wwdc2017/504/
-        //video_url = "http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8"; //video url
-        ///
-        //video_url = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8"; //video url
-        //1.http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8
-        //2.http://hls.ksl.com/t/KSL_NEWSRADIO/playlist.m3u8
         am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE); // for requesting audio
         mainHandler = new Handler(); //handler required for hls
         userAgent = Util.getUserAgent(this, "CanalActivity"); //useragent required for hls
@@ -313,22 +319,6 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
         playlistFetcher.singleLoad(mainHandler.getLooper(), this); //with 'this' we'll implement ManifestFetcher.ManifestCallback<HlsPlaylist>
 
     }
-
-    ///
-    /*
-    class CastOptionsProvider implements OptionsProvider {
-        @Override
-        public CastOptions getCastOptions(Context context) {
-            CastOptions castOptions = new CastOptions.Builder()
-                    .setReceiverApplicationId(context.getString(R.string.app_id))
-                    .build();
-            return castOptions;
-        }
-        @Override
-        public List<SessionProvider> getAdditionalSessionProviders(Context context) {
-            return null;
-        }
-    }*/
 
     public int getReg(int i) {
         return i;
@@ -369,24 +359,15 @@ public class CanalActivity extends AppCompatActivity implements ManifestFetcher.
                     // Getting JSON Array node
                     JSONArray chanel = jsonObj.getJSONArray("chanel");
 
-
-                    // looping through All Contacts
-                    //for (int i = 0; i < chanel.length(); i++) {
-                    JSONObject c = chanel.getJSONObject(0);
+                    JSONObject c = chanel.getJSONObject(regulator);
 
                     defaultChanelStr = c.getString("defaultChanelStr");
 
                     Intent i = new Intent(getApplicationContext(), CanalActivity.class);
                     i.putExtra("lrStr", defaultChanelStr);
+                    i.putExtra("regulatorStr", String.valueOf(regulator));
+                    i.putExtra("chanelLength", String.valueOf(chanel.length()-1));
                     startActivity(i);
-
-                    //defChanelStr = defaultChanelStr;
-                    //playExoPlayer(defaultChanelStr);
-
-                    //db.addCountry(country);
-                    //}
-
-                    //playExoPlayer(defaultChanelStr);
 
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());

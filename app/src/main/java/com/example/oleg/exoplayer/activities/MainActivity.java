@@ -70,15 +70,14 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
     private TrackRenderer videoRenderer;
     private MediaCodecAudioTrackRenderer audioRenderer;
 
-    private static String startUrl;
+    public static String startUrl;
 
     //FROM LOCALHOST WEB SERVER YET
     static {
-        startUrl = "http://192.168.0.12/ambrite/jsons/default_chanel.json";
-        //startUrl = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8";
+        startUrl = "http://192.168.0.12/ambrite/jsons/default_all_chanels.json";
     }
 
-    public int regulator;
+    private int regulator;
 
     Activity activity;
 
@@ -86,18 +85,18 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
 
     private ProgressDialog pDialog;
 
-    public String defChanelStr;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        regulator = 0;
+
         activity=this;
 
         new GetContacts().execute();
 
-        //listener with it will come two functions
+         //listener with it will come two functions
         ///btn_left
         btn_left=(Button)findViewById(R.id.btn_left);
         btn_left.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
             @Override
             public void onClick(View v) {
 
-                startUrl = "http://192.168.0.12/ambrite/jsons/default_chanelLeft.json";
+                regulator=0;
 
                 new GetContacts().execute();
 
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
             @Override
             public void onClick(View v) {
 
-                startUrl = "http://192.168.0.12/ambrite/jsons/default_chanelRight.json";
+                regulator=1;
 
                 new GetContacts().execute();
 
@@ -206,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
         }
         txt_playState.setText(text);
 
-        //for the text feild
     }
 
     @Override
@@ -267,8 +265,6 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
         //for play and pause
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -307,12 +303,6 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
 
         video_url = video_urlStr;
 
-        //https://developer.apple.com/videos/play/wwdc2017/504/
-        //video_url = "http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8"; //video url
-        ///
-        //video_url = "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8"; //video url
-        //1.http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8
-        //2.http://hls.ksl.com/t/KSL_NEWSRADIO/playlist.m3u8
         am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE); // for requesting audio
         mainHandler = new Handler(); //handler required for hls
         userAgent = Util.getUserAgent(this, "MainActivity"); //useragent required for hls
@@ -323,22 +313,6 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
 
     }
 
-    ///
-    /*
-    class CastOptionsProvider implements OptionsProvider {
-        @Override
-        public CastOptions getCastOptions(Context context) {
-            CastOptions castOptions = new CastOptions.Builder()
-                    .setReceiverApplicationId(context.getString(R.string.app_id))
-                    .build();
-            return castOptions;
-        }
-        @Override
-        public List<SessionProvider> getAdditionalSessionProviders(Context context) {
-            return null;
-        }
-    }*/
-
     public int getReg(int i) {
         return i;
     }
@@ -346,7 +320,8 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
     /**
      * Async task class to get json by making HTTP call
      */
-    private class GetContacts extends AsyncTask<Void, Void, Void> {
+    //public class GetContacts extends AsyncTask<Void, Void, Void> {
+  private class GetContacts extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -377,24 +352,15 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
                     // Getting JSON Array node
                     JSONArray chanel = jsonObj.getJSONArray("chanel");
 
-                    
-                    // looping through All Contacts
-                    //for (int i = 0; i < chanel.length(); i++) {
-                        JSONObject c = chanel.getJSONObject(0);
+                    JSONObject c = chanel.getJSONObject(regulator);
 
-                        defaultChanelStr = c.getString("defaultChanelStr");
+                    defaultChanelStr = c.getString("defaultChanelStr");
 
                     Intent i = new Intent(getApplicationContext(), CanalActivity.class);
                     i.putExtra("lrStr", defaultChanelStr);
+                    i.putExtra("regulatorStr", String.valueOf(regulator));
+                    i.putExtra("chanelLength", String.valueOf(chanel.length()-1));
                     startActivity(i);
-
-                        //defChanelStr = defaultChanelStr;
-                        //playExoPlayer(defaultChanelStr);
-
-                        //db.addCountry(country);
-                    //}
-
-                    //playExoPlayer(defaultChanelStr);
 
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -428,8 +394,6 @@ public class MainActivity extends AppCompatActivity implements ManifestFetcher.M
 
         @Override
         protected void onPostExecute(Void result) {
-
-
 
             super.onPostExecute(result);
             // Dismiss the progress dialog
