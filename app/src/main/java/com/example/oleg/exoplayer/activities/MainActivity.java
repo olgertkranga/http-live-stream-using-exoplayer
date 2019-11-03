@@ -1,406 +1,85 @@
 package com.example.oleg.exoplayer.activities;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaCodec;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.oleg.exoplayer.R;
-import com.example.oleg.exoplayer.internet.HttpHandler;
-import com.google.android.exoplayer.DefaultLoadControl;
-import com.google.android.exoplayer.ExoPlaybackException;
-import com.google.android.exoplayer.ExoPlayer;
-import com.google.android.exoplayer.LoadControl;
-import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
-import com.google.android.exoplayer.MediaCodecSelector;
-import com.google.android.exoplayer.MediaCodecVideoTrackRenderer;
-import com.google.android.exoplayer.TrackRenderer;
-import com.google.android.exoplayer.chunk.Format;
-import com.google.android.exoplayer.hls.DefaultHlsTrackSelector;
-import com.google.android.exoplayer.hls.HlsChunkSource;
-import com.google.android.exoplayer.hls.HlsMasterPlaylist;
-import com.google.android.exoplayer.hls.HlsPlaylist;
-import com.google.android.exoplayer.hls.HlsPlaylistParser;
-import com.google.android.exoplayer.hls.HlsSampleSource;
-import com.google.android.exoplayer.hls.PtsTimestampAdjusterProvider;
-import com.google.android.exoplayer.upstream.DataSource;
-import com.google.android.exoplayer.upstream.DefaultAllocator;
-import com.google.android.exoplayer.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer.upstream.DefaultUriDataSource;
-import com.google.android.exoplayer.util.ManifestFetcher;
-import com.google.android.exoplayer.util.PlayerControl;
-import com.google.android.exoplayer.util.Util;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements ManifestFetcher.ManifestCallback<HlsPlaylist>,
-        ExoPlayer.Listener,HlsSampleSource.EventListener, AudioManager.OnAudioFocusChangeListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
-    private SurfaceView surface;
-    private Button btn_play, btn_pause, btn_left, btn_right;
-    private ExoPlayer player;
-    private PlayerControl playerControl;
-    private String video_url;
-    private Handler mainHandler;
-    private AudioManager am;
-    private String userAgent;
-    private ManifestFetcher<HlsPlaylist> playlistFetcher;
-    private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
-    private static final int MAIN_BUFFER_SEGMENTS = 254;
-    public static final int TYPE_VIDEO = 0;
-    private TextView txt_playState;
-    private TrackRenderer videoRenderer;
-    private MediaCodecAudioTrackRenderer audioRenderer;
-
-    public static String startUrl;
-
-    //FROM LOCALHOST WEB SERVER YET
-    static {
-        startUrl = "http://192.168.0.12/ambrite/jsons/default_all_chanels.json";
-    }
-
-    private int regulator;
-
-    Activity activity;
-
-    private String TAG = MainActivity.class.getSimpleName();
-
-    private ProgressDialog pDialog;
+    private ParseContent parseContent;
+    private final int jsoncode = 1;
+    private ListView listView;
+    private ArrayList<PlayersModel> playersModelArrayList;
+    private CustomeAdapter customeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        regulator = 0;
+        parseContent = new ParseContent(this);
+        listView = (ListView) findViewById(R.id.lv);
 
-        activity=this;
-
-        new GetContacts().execute();
-
-         //listener with it will come two functions
-        ///btn_left
-        btn_left=(Button)findViewById(R.id.btn_left);
-        btn_left.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                regulator=0;
-
-                new GetContacts().execute();
-
-            }
-        });
-
-
-        ///btn_right
-        btn_right=(Button)findViewById(R.id.btn_right);
-        btn_right.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                regulator=1;
-
-                new GetContacts().execute();
-
-            }
-        });
-
-    }
-    //inside onSingleManifest we'll code to play hls
-    @Override
-    public void onSingleManifest(HlsPlaylist manifest) {
-        LoadControl loadControl = new DefaultLoadControl(new DefaultAllocator(BUFFER_SEGMENT_SIZE));
-        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        PtsTimestampAdjusterProvider timestampAdjusterProvider = new PtsTimestampAdjusterProvider();
-        boolean haveSubtitles = false;
-        boolean haveAudios = false;
-        if (manifest instanceof HlsMasterPlaylist) {
-            HlsMasterPlaylist masterPlaylist = (HlsMasterPlaylist) manifest;
-            haveSubtitles = !masterPlaylist.subtitles.isEmpty();
-
-        }
-        // Build the video/id3 renderers.
-        DataSource dataSource = new DefaultUriDataSource(this, bandwidthMeter, userAgent);
-        HlsChunkSource chunkSource = new HlsChunkSource(true /* isMaster */, dataSource, manifest,
-                DefaultHlsTrackSelector.newDefaultInstance(this), bandwidthMeter,
-                timestampAdjusterProvider, HlsChunkSource.ADAPTIVE_MODE_SPLICE);
-        HlsSampleSource sampleSource = new HlsSampleSource(chunkSource, loadControl,
-                MAIN_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, this, TYPE_VIDEO);
-        MediaCodecVideoTrackRenderer videoRenderer = new MediaCodecVideoTrackRenderer(this, sampleSource,
-                MediaCodecSelector.DEFAULT, MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT);
-        MediaCodecAudioTrackRenderer audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource,
-                MediaCodecSelector.DEFAULT);
-        this.videoRenderer = videoRenderer;
-        this.audioRenderer = audioRenderer;
-        pushSurface(false); // here we pushsurface
-        player.prepare(videoRenderer,audioRenderer); //prepare
-        player.addListener(this); //add listener for the text field
-        if (requestFocus())
-            player.setPlayWhenReady(true);
-    }
-    public boolean requestFocus() {
-        return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
-                am.requestAudioFocus(MainActivity.this, AudioManager.STREAM_MUSIC,
-                        AudioManager.AUDIOFOCUS_GAIN);
-    }
-    private void pushSurface(boolean blockForSurfacePush) {
-        if (videoRenderer == null) {return;}
-        if (blockForSurfacePush) {
-            player.blockingSendMessage(
-                    videoRenderer, MediaCodecVideoTrackRenderer.MSG_SET_SURFACE, surface.getHolder().getSurface());
-        } else {
-            player.sendMessage(
-                    videoRenderer, MediaCodecVideoTrackRenderer.MSG_SET_SURFACE, surface.getHolder().getSurface());
+        try {
+            parseJson();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    @Override
-    public void onSingleManifestError(IOException e) {
+    private void parseJson() throws IOException, JSONException {
 
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        String text = "";
-        switch (playbackState) {
-            case ExoPlayer.STATE_BUFFERING:
-                text += "buffering";
-                break;
-            case ExoPlayer.STATE_ENDED:
-                text += "ended";
-                break;
-            case ExoPlayer.STATE_IDLE:
-                text += "idle";
-                break;
-            case ExoPlayer.STATE_PREPARING:
-                text += "preparing";
-                break;
-            case ExoPlayer.STATE_READY:
-                text += "ready";
-                break;
-            default:
-                text += "unknown";
-                break;
+        if (!AndyUtils.isNetworkAvailable(MainActivity.this)) {
+            Toast.makeText(MainActivity.this, "Internet is required!", Toast.LENGTH_SHORT).show();
+            return;
         }
-        txt_playState.setText(text);
-
-    }
-
-    @Override
-    public void onPlayWhenReadyCommitted() {
-
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-
-    }
-
-    @Override
-    public void onLoadStarted(int sourceId, long length, int type, int trigger, Format format, long mediaStartTimeMs, long mediaEndTimeMs) {
-
-    }
-
-    @Override
-    public void onLoadCompleted(int sourceId, long bytesLoaded, int type, int trigger, Format format, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs) {
-
-    }
-
-    @Override
-    public void onLoadCanceled(int sourceId, long bytesLoaded) {
-
-    }
-
-    @Override
-    public void onLoadError(int sourceId, IOException e) {
-
-    }
-
-    @Override
-    public void onUpstreamDiscarded(int sourceId, long mediaStartTimeMs, long mediaEndTimeMs) {
-
-    }
-
-    @Override
-    public void onDownstreamFormatChanged(int sourceId, Format format, int trigger, long mediaTimeMs) {
-
-    }
-
-    @Override
-    public void onAudioFocusChange(int focusChange) {
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_pause:
-                playerControl.pause();
-                break;
-            case R.id.btn_play:
-                playerControl.start();
-                break;
-         }
-        //for play and pause
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //TOKEN
-        if (id == R.id.some_info) {
-            Toast.makeText(getApplicationContext(), "some information about the app", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(getApplicationContext(), InformationActivity.class);
-            startActivity(i);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void playExoPlayer(String video_urlStr) {
-
-        surface = (SurfaceView) findViewById(R.id.surface_view); // we import surface
-        txt_playState = (TextView) findViewById(R.id.txt_playstate);
-        btn_play = (Button) findViewById(R.id.btn_play);
-        btn_pause = (Button) findViewById(R.id.btn_pause);
-        btn_play.setOnClickListener(this);
-        btn_pause.setOnClickListener(this); // we init buttons and listners
-        player = ExoPlayer.Factory.newInstance(2);
-        playerControl = new PlayerControl(player); // we init player
-
-        video_url = video_urlStr;
-
-        am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE); // for requesting audio
-        mainHandler = new Handler(); //handler required for hls
-        userAgent = Util.getUserAgent(this, "MainActivity"); //useragent required for hls
-        HlsPlaylistParser parser = new HlsPlaylistParser(); // init HlsPlaylistParser
-        playlistFetcher = new ManifestFetcher<>(video_url, new DefaultUriDataSource(this, userAgent),
-                parser); // url goes here, useragent and parser
-        playlistFetcher.singleLoad(mainHandler.getLooper(), this); //with 'this' we'll implement ManifestFetcher.ManifestCallback<HlsPlaylist>
-
-    }
-
-    public int getReg(int i) {
-        return i;
-    }
-
-    /**
-     * Async task class to get json by making HTTP call
-     */
-    //public class GetContacts extends AsyncTask<Void, Void, Void> {
-  private class GetContacts extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Showing progress dialog
-            pDialog = new ProgressDialog(MainActivity.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
-
-            // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(startUrl);
-
-            String defaultChanelStr = null;
-
-            Log.e(TAG, "Response from url: " + jsonStr);
-
-            if (jsonStr != null) {
+        AndyUtils.showSimpleProgressDialog(MainActivity.this);
+        new AsyncTask<Void, Void, String>(){
+            protected String doInBackground(Void[] params) {
+                String response="";
+                HashMap<String, String> map=new HashMap<>();
                 try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-
-                    // Getting JSON Array node
-                    JSONArray chanel = jsonObj.getJSONArray("chanel");
-
-                    JSONObject c = chanel.getJSONObject(regulator);
-
-                    defaultChanelStr = c.getString("defaultChanelStr");
-
-                    Intent i = new Intent(getApplicationContext(), CanalActivity.class);
-                    i.putExtra("lrStr", defaultChanelStr);
-                    i.putExtra("regulatorStr", String.valueOf(regulator));
-                    i.putExtra("chanelLength", String.valueOf(chanel.length()-1));
-                    startActivity(i);
-
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    });
-
+                    HttpRequest req = new HttpRequest(AndyConstants.ServiceType.URL);
+                    response = req.prepare(HttpRequest.Method.POST).withData(map).sendAndReadString();
+                } catch (Exception e) {
+                    response=e.getMessage();
                 }
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
-
+                return response;
             }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            super.onPostExecute(result);
-            // Dismiss the progress dialog
-            if (pDialog.isShowing())
-                pDialog.dismiss();
-        }
-
+            protected void onPostExecute(String result) {
+                //do something with response
+                Log.d("newwwss",result);
+                onTaskCompleted(result,jsoncode);
+            }
+        }.execute();
     }
 
+    public void onTaskCompleted(String response, int serviceCode) {
+        Log.d("responsejson", response.toString());
+        switch (serviceCode) {
+            case jsoncode:
+
+                if (parseContent.isSuccess(response)) {
+                    AndyUtils.removeSimpleProgressDialog();  //will remove progress dialog
+                    playersModelArrayList = parseContent.getInfo(response);
+                    customeAdapter = new CustomeAdapter(this,playersModelArrayList);
+                    listView.setAdapter(customeAdapter);
+
+                }else {
+                    Toast.makeText(MainActivity.this, parseContent.getErrorCode(response), Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
 }
