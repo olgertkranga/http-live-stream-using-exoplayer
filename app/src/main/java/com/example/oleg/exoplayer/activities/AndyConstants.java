@@ -7,7 +7,12 @@ public class AndyConstants {
     }
     // web service url constants
     public class ServiceType {
-          public static final String URL = "http://demonuts.com/Demonuts/JsonTest/Tennis/json_parsing.php";
+          //http://localhost/revolut/
+          public static final String URL = "http://jogavisiem.lv/test/";
+          //public static final String URL = "https://revolut.duckdns.org/latest?base=EUR";
+          //public static final String URL = "http://192.168.1.176/revolut/";
+          //public static final String URL = "http://localhost/revolut/";
+          //public static final String URL = "http://demonuts.com/Demonuts/JsonTest/Tennis/json_parsing.php";
 
    }
     // webservice key constants

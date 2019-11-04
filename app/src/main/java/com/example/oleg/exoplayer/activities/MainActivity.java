@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         parseContent = new ParseContent(this);
         listView = (ListView) findViewById(R.id.lv);
 
+        this.setTitle("Revolut 5");
+
         try {
             parseJson();
         } catch (IOException e) {
@@ -46,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         AndyUtils.showSimpleProgressDialog(MainActivity.this);
+
         new AsyncTask<Void, Void, String>(){
+
             protected String doInBackground(Void[] params) {
                 String response="";
                 HashMap<String, String> map=new HashMap<>();
@@ -58,12 +62,14 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return response;
             }
+
             protected void onPostExecute(String result) {
                 //do something with response
                 Log.d("newwwss",result);
                 onTaskCompleted(result,jsoncode);
             }
         }.execute();
+
     }
 
     public void onTaskCompleted(String response, int serviceCode) {

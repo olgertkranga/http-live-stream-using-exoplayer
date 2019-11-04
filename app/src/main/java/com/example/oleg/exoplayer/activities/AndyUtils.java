@@ -30,9 +30,11 @@ public class AndyUtils {
             e.printStackTrace();
         }
     }
+
     public static void showSimpleProgressDialog(Context context) {
         showSimpleProgressDialog(context, null, "Loading...", false);
     }
+
     public static void removeSimpleProgressDialog() {
         try {
             if (mProgressDialog != null) {
