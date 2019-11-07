@@ -26,8 +26,16 @@ public class CustomeAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getViewTypeCount() {
-        return getCount();
+    public int getViewTypeCount()
+    {
+
+        if(getCount() > 0){
+            return getCount();
+        }else{
+            return super.getViewTypeCount();
+        }
+
+        //return getCount();
     }
     @Override
     public int getItemViewType(int position) {
@@ -36,7 +44,8 @@ public class CustomeAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return playersModelArrayList.size();
     }
 
@@ -62,7 +71,7 @@ public class CustomeAdapter extends BaseAdapter {
 
             holder.tvname = (TextView) convertView.findViewById(R.id.name);
             holder.tvcountry = (TextView) convertView.findViewById(R.id.country);
-            holder.tvcity = (TextView) convertView.findViewById(R.id.city);
+            //holder.tvcity = (TextView) convertView.findViewById(R.id.city);
 
             convertView.setTag(holder);
         }else {
@@ -70,16 +79,21 @@ public class CustomeAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
+        holder.tvname.setText("CUR: "+playersModelArrayList.get(position).getCurName());
+        holder.tvcountry.setText("RATE: "+playersModelArrayList.get(position).getCurRate());
+        /*
         holder.tvname.setText("Name: "+playersModelArrayList.get(position).getName());
         holder.tvcountry.setText("Country: "+playersModelArrayList.get(position).getCountry());
         holder.tvcity.setText("City: "+playersModelArrayList.get(position).getCity());
+        */
 
         return convertView;
     }
 
     private class ViewHolder {
 
-        protected TextView tvname, tvcountry, tvcity;
+        protected TextView tvname, tvcountry;
+        //protected TextView tvname, tvcountry, tvcity;
     }
 
 }

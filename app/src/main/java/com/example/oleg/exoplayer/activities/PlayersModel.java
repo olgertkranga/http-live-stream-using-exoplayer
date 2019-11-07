@@ -5,8 +5,55 @@ package com.example.oleg.exoplayer.activities;
  */
 public class PlayersModel {
 
-    private String name, country, city;
+    private long curID; //long
+    private String CurBase; //String
+    private String rateDate; //String
+    private String curName; //String
+    private String curRate; //double
 
+    public long getCurID() {
+        return curID;
+    }
+
+    public void setCurID(long curID) {
+        this.curID = curID;
+    }
+
+    public String getCurBase() {
+        return CurBase;
+    }
+
+    public void setCurBase(String curBase) {
+        CurBase = curBase;
+    }
+
+    public String getRateDate() {
+        return rateDate;
+    }
+
+    public void setRateDate(String rateDate) {
+        this.rateDate = rateDate;
+    }
+
+    public String getCurName() {
+        return curName;
+    }
+
+    public void setCurName(String curName) {
+        this.curName = curName;
+    }
+
+    public String getCurRate() {
+        return curRate;
+    }
+
+    public void setCurRate(String curRate) {
+        this.curRate = curRate;
+    }
+
+    //private String name, country, city;
+
+    /*
     public String getName() {
         return name;
     }
@@ -30,4 +77,5 @@ public class PlayersModel {
     public void setCity(String city) {
         this.city = city;
     }
+    */
 }
