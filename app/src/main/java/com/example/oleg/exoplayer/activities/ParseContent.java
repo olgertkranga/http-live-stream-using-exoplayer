@@ -87,7 +87,16 @@ public class ParseContent {
 
             /* print substrings */
             for (int i = 0; i < tempArray.length; i++) {
+
+                PlayersModel playersModel = new PlayersModel();
+
                 Log.d("PARSIK_16 = ", tempArray[i]);
+
+                playersModel.setCurName(tempArray[i]);
+                playersModel.setCurRate(tempArray[i]);
+
+                playersModelArrayList.add(playersModel);
+
             }
 
 

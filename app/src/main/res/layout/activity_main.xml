@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:textSize="20sp"
         android:textColor="#000"
-        android:text="Data from JSON Parsing"/>
+        android:text="Rates"/>
 
     <ListView
         android:layout_width="match_parent"
