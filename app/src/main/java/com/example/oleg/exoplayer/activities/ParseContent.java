@@ -6,6 +6,14 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,10 +35,62 @@ public class ParseContent {
 
    public boolean isSuccess(String response) {
 
-        try {
-            JSONObject jsonObject = new JSONObject(response);
+       Log.d("PARSIK_101 = ", response);
 
-            Log.d("PARSIK_1 = ", response);
+        try {
+
+            ///
+            String url = "https://revolut.duckdns.org/latest?base=EUR";
+
+            URL obj;
+            BufferedReader reader;
+            StringBuilder stringBuilder;
+            HttpURLConnection con;
+            stringBuilder = new StringBuilder();
+
+            try {
+
+
+                    obj = new URL(url);
+
+                con = (HttpURLConnection) obj.openConnection();
+                con.setRequestMethod("GET");
+                int responseCode = con.getResponseCode(); // to check success and failure of API call
+
+                //Log.d("PARSIK_2 = ", "2");
+                Log.d("Response_Codiks : ", String.valueOf(responseCode));
+                String response1 = con.getResponseMessage();
+
+                Log.d("Response_Code1 : ", response1.toString());
+
+                reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+
+                String line = null;
+
+                while ((line = reader.readLine()) != null){
+                    stringBuilder.append(line + "\n");
+
+                    //System.out.println("String : " + stringBuilder.toString());
+                }
+                //return stringBuilder.toString();
+
+            }catch(IOException e){
+                System.out.println("Error" + e);
+            }
+
+
+            //response = response.replace("\\\"","'");
+            //JSONObject jsonObject = new JSONObject(response.substring(1,response.length()-1));
+
+            response = stringBuilder.toString();
+
+            JSONObject jsonObject = new JSONObject(response);
+            //json = json.replace("\\\"","'"); JSONObject jo = new JSONObject(json.substring(1,json.length()-1));
+
+            Log.d("PARSIK_1710 = ", response);
+
+
 
             if ((jsonObject.optString(KEY_BASE).equals("EUR"))&&(jsonObject.optString(KEY_DATE).equals("2018-09-06"))) {
             //if (jsonObject.optString(KEY_SUCCESS).equals("true")) {
@@ -56,6 +116,9 @@ public class ParseContent {
             Log.d("PARSIK_3 = ", "3");
 
             JSONObject jsonObject = new JSONObject(response);
+
+            //return new JSONObject(json.substring(json.indexOf("{"), json.lastIndexOf("}") + 1));
+
             return jsonObject.getString(KEY_RATES);
             //return jsonObject.getString(KEY_MSG);
 
@@ -67,7 +130,56 @@ public class ParseContent {
 
    public ArrayList<PlayersModel> getInfo(String response) {
        ArrayList<PlayersModel> playersModelArrayList = new ArrayList<>();
-        try {
+
+       try {
+
+            ///
+            ///
+            String url = "https://revolut.duckdns.org/latest?base=EUR";
+
+            URL obj;
+            BufferedReader reader;
+            StringBuilder stringBuilder;
+            HttpURLConnection con;
+            stringBuilder = new StringBuilder();
+
+            try {
+
+
+                obj = new URL(url);
+
+                con = (HttpURLConnection) obj.openConnection();
+                con.setRequestMethod("GET");
+                int responseCode = con.getResponseCode(); // to check success and failure of API call
+
+                //Log.d("PARSIK_2 = ", "2");
+                Log.d("Response_Codiks : ", String.valueOf(responseCode));
+                String response1 = con.getResponseMessage();
+
+                Log.d("Response_Code1 : ", response1.toString());
+
+                reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+
+                String line = null;
+
+                while ((line = reader.readLine()) != null){
+                    stringBuilder.append(line + "\n");
+
+                    //System.out.println("String : " + stringBuilder.toString());
+                }
+                //return stringBuilder.toString();
+
+            }catch(IOException e){
+                System.out.println("Error" + e);
+            }
+
+
+            //response = response.replace("\\\"","'");
+            //JSONObject jsonObject = new JSONObject(response.substring(1,response.length()-1));
+
+            response = stringBuilder.toString();
+
 
             JSONObject jsonObject = new JSONObject(response);
 
@@ -85,6 +197,8 @@ public class ParseContent {
             String delimiter = ",";
             tempArray = r_ratesStr.split(delimiter);
 
+            String curName;
+
             /* print substrings */
             for (int i = 0; i < tempArray.length; i++) {
 
@@ -92,8 +206,20 @@ public class ParseContent {
 
                 Log.d("PARSIK_16 = ", tempArray[i]);
 
-                playersModel.setCurName(tempArray[i]);
-                playersModel.setCurRate(tempArray[i]);
+                curName = tempArray[i];
+                curName.replaceAll("\\s+","");
+
+                if (i==0) {
+
+                    playersModel.setCurName(curName.substring(2,5));
+                    playersModel.setCurRate(curName.substring(7));
+
+                } else {
+
+                    playersModel.setCurName(curName.substring(1, 4));
+                    playersModel.setCurRate(curName.substring(6));
+
+                }
 
                 playersModelArrayList.add(playersModel);
 

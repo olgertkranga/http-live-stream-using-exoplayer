@@ -1,6 +1,7 @@
 package com.example.oleg.exoplayer.activities;
 
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,10 +30,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ///
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new
+                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         parseContent = new ParseContent(this);
         listView = (ListView) findViewById(R.id.lv);
 
-        this.setTitle("Revolut 7");
+        this.setTitle("Revolut 5");
 
         Log.e(TAG, "REVOL_1");
 
@@ -84,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "REVOL_9");
 
                     response = req.prepare(HttpRequest.Method.POST).withData(map).sendAndReadString();
+                    //response = req.prepare(HttpRequest.Method.POST).withData(map).sendAndReadString();
 
                     Log.e(TAG, "REVOL_10");
 
@@ -99,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 onTaskCompleted(result,jsoncode);
             }
         }.execute();
-
     }
 
     public void onTaskCompleted(String response, int serviceCode) {
@@ -112,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 if (parseContent.isSuccess(response)) {
 
                     AndyUtils.removeSimpleProgressDialog();  //will remove progress dialog
+
                     playersModelArrayList = parseContent.getInfo(response);
+
                     customeAdapter = new CustomeAdapter(this,playersModelArrayList);
                     listView.setAdapter(customeAdapter);
 

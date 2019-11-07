@@ -79,8 +79,9 @@ public class CustomeAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        holder.tvname.setText("CUR: "+playersModelArrayList.get(position).getCurName());
-        holder.tvcountry.setText("RATE: "+playersModelArrayList.get(position).getCurRate());
+        holder.tvname.setText(playersModelArrayList.get(position).getCurName() + "                  " + playersModelArrayList.get(position).getCurRate());
+
+        holder.tvcountry.setText("");
         /*
         holder.tvname.setText("Name: "+playersModelArrayList.get(position).getName());
         holder.tvcountry.setText("Country: "+playersModelArrayList.get(position).getCountry());
