@@ -1,6 +1,7 @@
 package com.example.oleg.exoplayer.activities;
 
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,29 +42,29 @@ public class MainActivity extends AppCompatActivity {
         parseContent = new ParseContent(this);
         listView = (ListView) findViewById(R.id.lv);
 
-        this.setTitle("Revolut 7");
+        this.setTitle("Revolut 1");
 
         Log.e(TAG, "REVOL_1");
 
-        try {
+        Log.e(TAG, "REVOL_2");
 
-            Log.e(TAG, "REVOL_2");
+        ///
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    parseJson();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },1000);
+        //parseJson();
 
-            parseJson();
+        Log.e(TAG, "REVOL_3");
 
-            Log.e(TAG, "REVOL_3");
-
-        } catch (IOException e) {
-
-            Log.e(TAG, "REVOL_4");
-
-            e.printStackTrace();
-        } catch (JSONException e) {
-
-            Log.e(TAG, "REVOL_5");
-
-            e.printStackTrace();
-        }
     }
 
     private void parseJson() throws IOException, JSONException {
