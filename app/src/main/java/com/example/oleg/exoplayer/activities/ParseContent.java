@@ -137,57 +137,87 @@ public class ParseContent {
             ///
             String url = "https://revolut.duckdns.org/latest?base=EUR";
 
-            URL obj;
-            BufferedReader reader;
-            StringBuilder stringBuilder;
-            HttpURLConnection con;
+            //String url_cur_description = "https://demonuts.com/Demonuts/JsonTest/Tennis/json_parsing.php";
+           //String url_cur_description = "http://jogavisiem.lv/test2/index.php";
+
+            URL obj, obj1;
+            BufferedReader reader, reader1;
+            StringBuilder stringBuilder, stringBuilder1;
+            HttpURLConnection con, con1;
             stringBuilder = new StringBuilder();
+            stringBuilder1 = new StringBuilder();
 
             try {
-
-
                 obj = new URL(url);
-
+                //obj1 = new URL(url_cur_description);
                 con = (HttpURLConnection) obj.openConnection();
                 con.setRequestMethod("GET");
                 int responseCode = con.getResponseCode(); // to check success and failure of API call
-
+                //con1 = (HttpURLConnection) obj1.openConnection();
+                //con1.setRequestMethod("GET");
+                //int responseCode1 = con1.getResponseCode();
                 //Log.d("PARSIK_2 = ", "2");
                 Log.d("Response_Codiks : ", String.valueOf(responseCode));
                 String response1 = con.getResponseMessage();
-
+                //String response2 = con1.getResponseMessage();
                 Log.d("Response_Code1 : ", response1.toString());
-
                 reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-
+                //reader1 = new BufferedReader(new InputStreamReader(con1.getInputStream()));
                 String line = null;
-
+                //String line1 = null;
                 while ((line = reader.readLine()) != null){
                     stringBuilder.append(line + "\n");
-
                     //System.out.println("String : " + stringBuilder.toString());
                 }
+                //while ((line1 = reader1.readLine()) != null){
+                //    stringBuilder1.append(line1 + "\n");
+                //}
                 //return stringBuilder.toString();
-
             }catch(IOException e){
                 System.out.println("Error" + e);
             }
 
+            /*
+            try {
+                obj1 = new URL(url_cur_description);
+                con1 = (HttpURLConnection) obj1.openConnection();
+                con1.setRequestMethod("GET");
+                int responseCode1 = con1.getResponseCode();
+                String response2 = con1.getResponseMessage();
+                reader1 = new BufferedReader(new InputStreamReader(con1.getInputStream()));
 
-            //response = response.replace("\\\"","'");
+                Log.d("PARSIK_610 = ", reader1.toString());
+
+                String line1 = null;
+                while ((line1 = reader1.readLine()) != null) {
+                    stringBuilder1.append(line1 + "\n");
+                }
+                Log.d("PARSIK_609 = ", stringBuilder1.toString());
+            }catch(IOException e){
+               System.out.println("Error" + e);
+            }
+            */
+
+           //response = response.replace("\\\"","'");
             //JSONObject jsonObject = new JSONObject(response.substring(1,response.length()-1));
 
-            response = stringBuilder.toString();
+           String response10 = stringBuilder.toString();
+           //response = stringBuilder.toString();
+            //String response3 = stringBuilder1.toString();
 
+            JSONObject jsonObject = new JSONObject(response10);
+            JSONObject jsonObject1 = new JSONObject(response);
 
-            JSONObject jsonObject = new JSONObject(response);
+           Log.d("PARSIK_6 = ", response10);
+           Log.d("PARSIK_6054 = ", response);
 
-            Log.d("PARSIK_6 = ", response);
+           JSONObject r_rates = jsonObject.getJSONObject("rates");
 
-            JSONObject r_rates = jsonObject.getJSONObject("rates");
+           //JSONArray json_desc = new JSONObject(response).getJSONArray("currencies_descriptions");
+           //JSONObject json_desc = jsonObject1.getJSONObject("currencies_descriptions");
 
             Log.d("PARSIK_15 = ", String.valueOf(r_rates));
+            //Log.d("PARSIK_150 = ", String.valueOf(json_desc));
 
             String r_ratesStr;
             r_ratesStr = String.valueOf(r_rates);
@@ -204,20 +234,30 @@ public class ParseContent {
 
                 PlayersModel playersModel = new PlayersModel();
 
-                Log.d("PARSIK_16 = ", tempArray[i]);
+                Log.d("PARSIK_1624 = ", tempArray[i]);
 
                 curName = tempArray[i];
                 curName.replaceAll("\\s+","");
 
-                if (i==0) {
+                JSONArray json_desc = new JSONObject(response).getJSONArray("currencies_descriptions");
 
-                    playersModel.setCurName(curName.substring(2,5));
-                    playersModel.setCurRate(curName.substring(7));
+                for (int j = 0; j < json_desc.length(); j++) {
 
-                } else {
+                    if (i == 0) {
 
-                    playersModel.setCurName(curName.substring(1, 4));
-                    playersModel.setCurRate(curName.substring(6));
+                        Log.d("PARSIK_1021 = ", "");
+
+                        playersModel.setCurName(curName.substring(2, 5));
+                        playersModel.setCurRate(curName.substring(7));
+
+                    } else {
+
+                        Log.d("PARSIK_2021 = ", "");
+
+                        playersModel.setCurName(curName.substring(1, 4));
+                        playersModel.setCurRate(curName.substring(6));
+
+                    }
 
                 }
 

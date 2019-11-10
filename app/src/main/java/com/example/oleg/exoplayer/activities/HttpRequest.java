@@ -19,7 +19,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.net.ssl.HttpsURLConnection;
+//import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Since HttpClient,BasicNameValuePairs, etc...  are deprecated.
@@ -47,16 +47,16 @@ public class HttpRequest {
     }
     private URL url;
 
-    private HttpsURLConnection con;
-    //private HttpURLConnection con;
+    //private HttpsURLConnection con;
+    private HttpURLConnection con;
 
     private OutputStream os;
     //After instantiation, when opening connection - IOException can occur
     public HttpRequest(URL url)throws IOException{
         this.url=url;
 
-        con = (HttpsURLConnection)this.url.openConnection();
-        //con = (HttpURLConnection)this.url.openConnection();
+        //con = (HttpsURLConnection)this.url.openConnection();
+        con = (HttpURLConnection)this.url.openConnection();
 
     }
     //Can be instantiated with String representation of url, force caller to check for IOException which can be thrown
