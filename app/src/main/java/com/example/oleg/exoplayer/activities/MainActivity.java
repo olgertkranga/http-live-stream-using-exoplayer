@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         parseContent = new ParseContent(this);
         listView = (ListView) findViewById(R.id.lv);
 
-        this.setTitle("Revolut 9");
+        this.setTitle("Revolut 1");
 
         Log.e(TAG, "REVOL_1");
 

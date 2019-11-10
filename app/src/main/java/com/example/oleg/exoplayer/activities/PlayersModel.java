@@ -1,8 +1,5 @@
 package com.example.oleg.exoplayer.activities;
 
-/**
- * Created by Parsania Hardik on 19-Apr-17.
- */
 public class PlayersModel {
 
     private long curID; //long
@@ -10,6 +7,7 @@ public class PlayersModel {
     private String rateDate; //String
     private String curName; //String
     private String curRate; //double
+    private String curDesc;
 
     public long getCurID() {
         return curID;
@@ -49,6 +47,14 @@ public class PlayersModel {
 
     public void setCurRate(String curRate) {
         this.curRate = curRate;
+    }
+
+    public String getCurDesc() {
+        return curDesc;
+    }
+
+    public void setCurDesc(String curDesc) {
+        this.curDesc = curDesc;
     }
 
     //private String name, country, city;

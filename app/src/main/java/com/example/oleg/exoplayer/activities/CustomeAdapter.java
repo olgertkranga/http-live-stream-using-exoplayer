@@ -71,6 +71,7 @@ public class CustomeAdapter extends BaseAdapter {
 
             holder.tvname = (TextView) convertView.findViewById(R.id.name);
             holder.tvcountry = (TextView) convertView.findViewById(R.id.country);
+
             //holder.tvcity = (TextView) convertView.findViewById(R.id.city);
 
             convertView.setTag(holder);
@@ -81,7 +82,7 @@ public class CustomeAdapter extends BaseAdapter {
 
         holder.tvname.setText(playersModelArrayList.get(position).getCurName() + "                  " + playersModelArrayList.get(position).getCurRate());
 
-        holder.tvcountry.setText("");
+        holder.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
         /*
         holder.tvname.setText("Name: "+playersModelArrayList.get(position).getName());
         holder.tvcountry.setText("Country: "+playersModelArrayList.get(position).getCountry());
