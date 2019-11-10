@@ -265,9 +265,9 @@ public class ParseContent {
                         playersModel.setCurName(curName.substring(2, 5));
                         playersModel.setCurRate(curName.substring(7));
 
-                        if (refStr.equals(curName1)) {
-                            playersModel.setCurDesc(descStr);
-                        }
+                        //if (refStr.equals(curName1)) {
+                        //    playersModel.setCurDesc(descStr);
+                        //}
 
                     } else {
 
@@ -278,10 +278,14 @@ public class ParseContent {
 
                         curName1 = curName.substring(1, 4);
 
-                        if (refStr.equals(curName1)) {
-                            playersModel.setCurDesc(descStr);
-                        }
+                        //if (refStr.equals(curName1)) {
+                        //    playersModel.setCurDesc(descStr);
+                        //}
 
+                    }
+
+                    if (refStr.equals(curName1)) {
+                        playersModel.setCurDesc(descStr);
                     }
 
                 }
