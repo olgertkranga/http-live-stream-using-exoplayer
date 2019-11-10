@@ -229,7 +229,13 @@ public class ParseContent {
 
             String curName;
 
-            /* print substrings */
+            PlayersModel playersModel1 = new PlayersModel();
+            playersModel1.setCurName("EUR");
+            playersModel1.setCurRate("1.0000");
+            playersModel1.setCurDesc("Euro");
+            playersModelArrayList.add(playersModel1);
+
+           /* print substrings */
             for (int i = 0; i < tempArray.length; i++) {
 
                 PlayersModel playersModel = new PlayersModel();
@@ -242,6 +248,12 @@ public class ParseContent {
                 JSONArray json_desc = new JSONObject(response).getJSONArray("currencies_descriptions");
 
                 String curName1;
+
+                ///FIRST element - EURO Kostil
+                //playersModel.setCurName("EUR");
+                //playersModel.setCurRate("1.0000");
+                //playersModel.setCurDesc("Euro");
+                ///
 
                 for (int j = 0; j < json_desc.length(); j++) {
 
@@ -291,6 +303,8 @@ public class ParseContent {
                 }
 
                 playersModelArrayList.add(playersModel);
+
+                //aListNumbers.add(0, "Zero");
 
             }
 
