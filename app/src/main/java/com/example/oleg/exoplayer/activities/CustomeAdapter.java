@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.oleg.exoplayer.R;
@@ -70,6 +71,7 @@ public class CustomeAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.lv_item, null, true);
 
             holder.tvname = (TextView) convertView.findViewById(R.id.name);
+            holder.currencyRate = (EditText) convertView.findViewById(R.id.currencyRate);
             holder.tvcountry = (TextView) convertView.findViewById(R.id.country);
 
             //holder.tvcity = (TextView) convertView.findViewById(R.id.city);
@@ -80,9 +82,11 @@ public class CustomeAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        holder.tvname.setText(playersModelArrayList.get(position).getCurName() + "                  " + playersModelArrayList.get(position).getCurRate());
-
+        holder.tvname.setText(playersModelArrayList.get(position).getCurName());
+        holder.currencyRate.setText(playersModelArrayList.get(position).getCurRate());
+        //holder.tvname.setText(playersModelArrayList.get(position).getCurName() + "                  " + playersModelArrayList.get(position).getCurRate());
         holder.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
+
         /*
         holder.tvname.setText("Name: "+playersModelArrayList.get(position).getName());
         holder.tvcountry.setText("Country: "+playersModelArrayList.get(position).getCountry());
@@ -94,7 +98,7 @@ public class CustomeAdapter extends BaseAdapter {
 
     private class ViewHolder {
 
-        protected TextView tvname, tvcountry;
+        protected TextView tvname, currencyRate, tvcountry;
         //protected TextView tvname, tvcountry, tvcity;
     }
 

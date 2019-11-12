@@ -5,8 +5,14 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.oleg.exoplayer.R;
@@ -26,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getCanonicalName();
 
+    EditText currencyRate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +49,41 @@ public class MainActivity extends AppCompatActivity {
 
         parseContent = new ParseContent(this);
         listView = (ListView) findViewById(R.id.lv);
+        currencyRate = (EditText) findViewById(R.id.currencyRate);
 
-        this.setTitle("Revolut 1");
+        this.setTitle("Revolut 9");
 
         Log.e(TAG, "REVOL_1");
 
         Log.e(TAG, "REVOL_2");
 
-        ///
+        try {
+            currencyRate.setOnEditorActionListener(new TextView.OnEditorActionListener()
+            {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId,
+                                              KeyEvent event)
+                {
+                    boolean handled = false;
+                    Log.e(TAG, "REVOL_200");
+                    if (event.getAction() == KeyEvent.KEYCODE_ENTER)
+                    {
+
+                        Log.e(TAG, "REVOL_201");
+                        Toast.makeText(MainActivity.this, "HEY! ::: " + currencyRate.getText(), Toast.LENGTH_SHORT).show();
+                        // Handle pressing "Enter" key here
+
+                        handled = true;
+                    }
+                    return handled;
+                }
+            });
+        } catch(NullPointerException e)
+        {
+            System.out.print("NullPointerException Caught");
+        }
+
+            ///
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
