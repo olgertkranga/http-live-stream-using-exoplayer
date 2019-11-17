@@ -22,13 +22,16 @@
             android:paddingLeft="10dp"
             android:text="" />
 
-        <!-- currencyRate -->
+        <!-- currencyRate  android:singleLine="true"  android:imeOptions="actionSend" android:inputType="number" -->
         <EditText
             android:id="@+id/currencyRate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#fff"
             android:layout_marginTop="0dp"
+
+
+
             android:layout_marginLeft="200dp"
             android:gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"

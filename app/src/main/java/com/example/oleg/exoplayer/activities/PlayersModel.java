@@ -7,7 +7,8 @@ public class PlayersModel {
     private String rateDate; //String
     private String curName; //String
     private String curRate; //double
-    private String curDesc;
+    private String curDesc; //
+    private String curUrlFlag;
 
     public long getCurID() {
         return curID;

@@ -1,15 +1,20 @@
 package com.example.oleg.exoplayer.activities;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,51 +44,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.setTitle("Revolut 7");
+
         ///
-        if (android.os.Build.VERSION.SDK_INT > 9)
-        {
+        if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new
                     StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
 
         parseContent = new ParseContent(this);
+
         listView = (ListView) findViewById(R.id.lv);
+
         currencyRate = (EditText) findViewById(R.id.currencyRate);
 
-        this.setTitle("Revolut 9");
+        try {
+            currencyRate.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
+        catch (NullPointerException e) {
+
+        }
+
+        ///
+        try {
+            setKeyListenerForEnter();
+        }
+        catch (NullPointerException e) {
+
+        }
 
         Log.e(TAG, "REVOL_1");
 
         Log.e(TAG, "REVOL_2");
 
-        try {
-            currencyRate.setOnEditorActionListener(new TextView.OnEditorActionListener()
-            {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId,
-                                              KeyEvent event)
-                {
-                    boolean handled = false;
-                    Log.e(TAG, "REVOL_200");
-                    if (event.getAction() == KeyEvent.KEYCODE_ENTER)
-                    {
-
-                        Log.e(TAG, "REVOL_201");
-                        Toast.makeText(MainActivity.this, "HEY! ::: " + currencyRate.getText(), Toast.LENGTH_SHORT).show();
-                        // Handle pressing "Enter" key here
-
-                        handled = true;
-                    }
-                    return handled;
-                }
-            });
-        } catch(NullPointerException e)
-        {
-            System.out.print("NullPointerException Caught");
-        }
-
-            ///
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -96,11 +90,54 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         },1000);
-        //parseJson();
 
         Log.e(TAG, "REVOL_3");
 
     }
+
+    ///
+    /*
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+
+            case KeyEvent.FLAG_SOFT_KEYBOARD:
+                Toast.makeText(this, "5 1", Toast.LENGTH_SHORT)
+                        .show();
+                Log.e(TAG, "REVOL_X");
+                return true;
+
+            case KeyEvent.KEYCODE_3:
+                Toast.makeText(this, "ENTER", Toast.LENGTH_SHORT)
+                        .show();
+                Log.e(TAG, "REVOL_ENTER");
+                return true;
+
+
+
+            case KeyEvent.KEYCODE_MENU:
+                Toast.makeText(this, "Нажата кнопка Меню", Toast.LENGTH_SHORT)
+                        .show();
+                return true;
+            case KeyEvent.KEYCODE_SEARCH:
+                Toast.makeText(this, "Нажата кнопка Поиск", Toast.LENGTH_SHORT)
+                        .show();
+                return true;
+            case KeyEvent.KEYCODE_BACK:
+                onBackPressed();
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                event.startTracking();
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                Toast.makeText(this, "Нажата кнопка громкости", Toast.LENGTH_SHORT)
+                        .show();
+                return false;
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    */
 
     private void parseJson() throws IOException, JSONException {
 
@@ -168,5 +205,30 @@ public class MainActivity extends AppCompatActivity {
                 }
         }
     }
+
+    ///
+
+    public void setKeyListenerForEnter(){
+
+        final EditText search_entry = (EditText) findViewById(R.id.currencyRate);
+        search_entry.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+                    Log.e(TAG, "REVOL_Q");
+
+                    //getSearchResults(v);
+
+                    setKeyListenerForEnter();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    ///
 
 }
