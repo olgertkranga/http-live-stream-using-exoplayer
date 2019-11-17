@@ -30,7 +30,7 @@
             android:textColor="#fff"
             android:layout_marginTop="0dp"
 
-
+            android:inputType="numberDecimal"
 
             android:layout_marginLeft="200dp"
             android:gravity="center_vertical"

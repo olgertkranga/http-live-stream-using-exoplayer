@@ -66,14 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        ///
-        try {
-            setKeyListenerForEnter();
-        }
-        catch (NullPointerException e) {
-
-        }
-
         Log.e(TAG, "REVOL_1");
 
         Log.e(TAG, "REVOL_2");
@@ -94,50 +86,6 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "REVOL_3");
 
     }
-
-    ///
-    /*
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-
-            case KeyEvent.FLAG_SOFT_KEYBOARD:
-                Toast.makeText(this, "5 1", Toast.LENGTH_SHORT)
-                        .show();
-                Log.e(TAG, "REVOL_X");
-                return true;
-
-            case KeyEvent.KEYCODE_3:
-                Toast.makeText(this, "ENTER", Toast.LENGTH_SHORT)
-                        .show();
-                Log.e(TAG, "REVOL_ENTER");
-                return true;
-
-
-
-            case KeyEvent.KEYCODE_MENU:
-                Toast.makeText(this, "Нажата кнопка Меню", Toast.LENGTH_SHORT)
-                        .show();
-                return true;
-            case KeyEvent.KEYCODE_SEARCH:
-                Toast.makeText(this, "Нажата кнопка Поиск", Toast.LENGTH_SHORT)
-                        .show();
-                return true;
-            case KeyEvent.KEYCODE_BACK:
-                onBackPressed();
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                event.startTracking();
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                Toast.makeText(this, "Нажата кнопка громкости", Toast.LENGTH_SHORT)
-                        .show();
-                return false;
-
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-    */
 
     private void parseJson() throws IOException, JSONException {
 
@@ -205,30 +153,5 @@ public class MainActivity extends AppCompatActivity {
                 }
         }
     }
-
-    ///
-
-    public void setKeyListenerForEnter(){
-
-        final EditText search_entry = (EditText) findViewById(R.id.currencyRate);
-        search_entry.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
-                    Log.e(TAG, "REVOL_Q");
-
-                    //getSearchResults(v);
-
-                    setKeyListenerForEnter();
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    ///
 
 }
