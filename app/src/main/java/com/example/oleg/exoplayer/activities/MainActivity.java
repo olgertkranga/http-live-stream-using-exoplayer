@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.setTitle("Revolut 7");
+        this.setTitle("Revolut 9");
 
         ///
         if (android.os.Build.VERSION.SDK_INT > 9) {
