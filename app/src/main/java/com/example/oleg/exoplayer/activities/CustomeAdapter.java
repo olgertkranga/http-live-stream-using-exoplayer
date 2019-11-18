@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.oleg.exoplayer.R;
+import com.example.oleg.exoplayer.db.SQLiteDatabaseHandler;
+import com.example.oleg.exoplayer.models.Currency;
 
 import java.util.ArrayList;
 
@@ -17,11 +19,21 @@ import java.util.ArrayList;
  */
 public class CustomeAdapter extends BaseAdapter {
 
+    //private Activity context;
+    public ArrayList<Currency> currency;
+    SQLiteDatabaseHandler db;
+
     private Context context;
+
     private ArrayList<PlayersModel> playersModelArrayList;
 
-    public CustomeAdapter(Context context, ArrayList<PlayersModel> playersModelArrayList) {
+    public CustomeAdapter(Context context, ArrayList<PlayersModel> playersModelArrayList, SQLiteDatabaseHandler db) {
+        this.context = context;
+        this.playersModelArrayList = playersModelArrayList;
+        this.db = db;
+    }
 
+    public CustomeAdapter(Context context, ArrayList<PlayersModel> playersModelArrayList) {
         this.context = context;
         this.playersModelArrayList = playersModelArrayList;
     }
@@ -47,7 +59,12 @@ public class CustomeAdapter extends BaseAdapter {
     @Override
     public int getCount()
     {
-        return playersModelArrayList.size();
+        //try {
+            return playersModelArrayList.size();
+        //}
+        //catch (NullPointerException e) {
+        //    return 0;
+        //}
     }
 
     @Override
@@ -83,9 +100,12 @@ public class CustomeAdapter extends BaseAdapter {
         }
 
         holder.tvname.setText(playersModelArrayList.get(position).getCurName());
-        holder.currencyRate.setText(playersModelArrayList.get(position).getCurRate());
-        //holder.tvname.setText(playersModelArrayList.get(position).getCurName() + "                  " + playersModelArrayList.get(position).getCurRate());
+        holder.currencyRate.setText(String.valueOf(playersModelArrayList.get(position).getCurRate()));
         holder.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
+
+        //holder.currencyRate.setText(currency.get(position).getCurRate());
+        //holder.tvname.setText(playersModelArrayList.get(position).getCurName() + "                  " + playersModelArrayList.get(position).getCurRate());
+        //holder.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
 
         /*
         holder.tvname.setText("Name: "+playersModelArrayList.get(position).getName());

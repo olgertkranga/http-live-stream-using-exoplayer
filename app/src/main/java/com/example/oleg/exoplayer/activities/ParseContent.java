@@ -1,7 +1,11 @@
 package com.example.oleg.exoplayer.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
+
+import com.example.oleg.exoplayer.db.SQLiteDatabaseHandler;
+import com.example.oleg.exoplayer.models.Currency;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class ParseContent {
@@ -29,9 +34,15 @@ public class ParseContent {
 
     ArrayList<HashMap<String, String>> arraylist;
 
-    public ParseContent(Activity activity) {
+    ///
+    SQLiteDatabaseHandler db;
+
+    public ParseContent(Activity activity)
+    {
         this.activity = activity;
     }
+
+    MainActivity ma = new MainActivity();
 
    public boolean isSuccess(String response) {
 
@@ -147,6 +158,8 @@ public class ParseContent {
             stringBuilder = new StringBuilder();
             stringBuilder1 = new StringBuilder();
 
+           //db = new SQLiteDatabaseHandler(new MainActivity());
+
             try {
                 obj = new URL(url);
                 //obj1 = new URL(url_cur_description);
@@ -235,6 +248,21 @@ public class ParseContent {
             playersModel1.setCurDesc("Euro");
             playersModelArrayList.add(playersModel1);
 
+           //PlayersModel currency = new PlayersModel(
+           //        "2019-11-18", //2
+           //        "EUR", //3
+           //        "1.0002", //4
+           //        "Euro",
+           //        ""
+           //);
+
+           //Log.d("PARSIK_1625 = ", currency.getCurName());
+            ///db = new SQLiteDatabaseHandler(this);
+            ///
+
+           //db = new SQLiteDatabaseHandler(new MainActivity());
+           //db.addNewCurrency(currency);
+
            /* print substrings */
             for (int i = 0; i < tempArray.length; i++) {
 
@@ -247,7 +275,10 @@ public class ParseContent {
 
                 JSONArray json_desc = new JSONObject(response).getJSONArray("currencies_descriptions");
 
-                String curName1;
+                String curName1 = null;
+                String rrate = "0.0000";
+                //Double rrate = 0.0000;
+                String descStr = null;
 
                 ///FIRST element - EURO Kostil
                 //playersModel.setCurName("EUR");
@@ -260,7 +291,7 @@ public class ParseContent {
                     JSONObject objJson = json_desc.getJSONObject(j);
 
                     String refStr = objJson.getString("ref");
-                    String descStr = objJson.getString("desc");
+                    descStr = objJson.getString("desc");
 
                     Log.d("PARSIK_REF = ", refStr);
                     Log.d("PARSIK_DESC = ", descStr);
@@ -277,6 +308,9 @@ public class ParseContent {
                         playersModel.setCurName(curName.substring(2, 5));
                         playersModel.setCurRate(curName.substring(7));
 
+                        //rrate = Double.valueOf(curName.substring(7));
+                        rrate = curName.substring(6);
+
                         //if (refStr.equals(curName1)) {
                         //    playersModel.setCurDesc(descStr);
                         //}
@@ -289,6 +323,8 @@ public class ParseContent {
                         playersModel.setCurRate(curName.substring(6));
 
                         curName1 = curName.substring(1, 4);
+                        //rrate = Double.valueOf(curName.substring(6));
+                        rrate = curName.substring(6);
 
                         //if (refStr.equals(curName1)) {
                         //    playersModel.setCurDesc(descStr);
@@ -303,6 +339,19 @@ public class ParseContent {
                 }
 
                 playersModelArrayList.add(playersModel);
+
+
+                //PlayersModel currency1 = new PlayersModel(
+                //        "2019-11-18", //2
+                //        curName1, //
+                //        rrate, //4
+                //        descStr,
+                //        ""
+                //);
+
+                //Log.d("WWWWW = ", descStr);
+
+                //db.addNewCurrency(currency1);
 
                 //aListNumbers.add(0, "Zero");
 

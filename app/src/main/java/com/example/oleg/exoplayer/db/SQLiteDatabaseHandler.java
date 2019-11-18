@@ -1,11 +1,14 @@
 package com.example.oleg.exoplayer.db;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.oleg.exoplayer.activities.ParseContent;
+import com.example.oleg.exoplayer.activities.PlayersModel;
 import com.example.oleg.exoplayer.models.Currency;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "revolut_db";
+    private static final String DATABASE_NAME = "revolut_db1";
 
     //TABLE_CONTAINERS_SALES
     //ContainersSales table name
@@ -32,9 +35,13 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String CUR_DESC = "cur_desc"; //5
     private static final String CUR_URL_FLAG = "cur_url_flag"; //6
 
-    public SQLiteDatabaseHandler(Context context) {
+    public SQLiteDatabaseHandler(Activity context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
+    //public SQLiteDatabaseHandler(Context context) {
+    //    super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    //}
 
     // Creating Tables
     @Override
@@ -66,7 +73,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * All CRUD(Create, Read, Update, Delete) Operations
      */
     //ADDING NEW ORDERS
-     public void addNewCurrency(Currency currency) {
+     public void addNewCurrency(PlayersModel currency) {
+
          SQLiteDatabase db = this.getWritableDatabase();
 
          ContentValues values = new ContentValues();
@@ -74,7 +82,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
          values.put(RATE_DATE, currency.getRateDate()); // 2
          values.put(CUR_NAME, currency.getCurName()); // 3
          values.put(CUR_RATE, currency.getCurRate()); // 4
-         values.put(CUR_DESC, currency.getCurDescription()); // 5
+         values.put(CUR_DESC, currency.getCurDesc()); // 5
          values.put(CUR_URL_FLAG, currency.getCurUrlFlag()); // 6
 
          // Inserting Row
@@ -83,8 +91,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     }
 
     ///SELECT FOR ALL ORDERS ACTIVITY
-    public List<Currency> getCurrencyList(String whereCurrencyListStr) {
-        List<Currency> currencyList = new ArrayList<Currency>();
+    public List<PlayersModel> getCurrencyList(String whereCurrencyListStr) {
+        List<PlayersModel> currencyList = new ArrayList<PlayersModel>();
         // Select All Query
         String selectQuery = "SELECT" +
                 " rate_date," + //2
@@ -98,12 +106,12 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Currency currency = new Currency();
+                PlayersModel currency = new PlayersModel();
 
                 currency.setRateDate(cursor.getString(0)); //2
                 currency.setCurName(cursor.getString(1)); //3
-                currency.setCurRate(cursor.getDouble(2)); //4
-                currency.setCurDescription(cursor.getString(3)); //5
+                currency.setCurRate(cursor.getString(2)); //4
+                currency.setCurDesc(cursor.getString(3)); //5
                 currency.setCurUrlFlag(cursor.getString(4)); //6
 
                 // Adding country to list

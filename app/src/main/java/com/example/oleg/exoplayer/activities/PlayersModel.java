@@ -3,12 +3,38 @@ package com.example.oleg.exoplayer.activities;
 public class PlayersModel {
 
     private long curID; //long
+
     private String CurBase; //String
     private String rateDate; //String
     private String curName; //String
     private String curRate; //double
     private String curDesc; //
     private String curUrlFlag;
+
+
+
+
+    ///
+    public PlayersModel(
+            String rateDate, //2
+            String curName, //3
+            String curRate, //4
+            String curDesc, //5
+            String curUrlFlag) //6
+    {
+
+        this.rateDate = rateDate; //2
+        this.curName = curName; //3
+        this.curRate = curRate; //4
+        this.curDesc = curDesc; //5
+        this.curUrlFlag = curUrlFlag; //6
+
+    }
+
+    public PlayersModel() {
+
+    }
+
 
     public long getCurID() {
         return curID;
@@ -56,6 +82,14 @@ public class PlayersModel {
 
     public void setCurDesc(String curDesc) {
         this.curDesc = curDesc;
+    }
+
+    public String getCurUrlFlag() {
+        return curUrlFlag;
+    }
+
+    public void setCurUrlFlag(String curUrlFlag) {
+        this.curUrlFlag = curUrlFlag;
     }
 
     //private String name, country, city;
