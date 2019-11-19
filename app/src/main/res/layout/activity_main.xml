@@ -16,6 +16,43 @@
         android:textColor="#000"
         android:text="Rates"/>
 
+    <!-- For Test only -->
+    <Button
+        android:id="@+id/pullRatesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="10dp"
+        android:text="+"
+        android:textColor="#4B0082"
+        android:textSize="12dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/removeAllButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="-50dp"
+        android:text="-"
+        android:textColor="#4B0082"
+        android:textSize="12dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/currencyRate1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#fff"
+        android:inputType="numberDecimal"
+
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:text="1.0000" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

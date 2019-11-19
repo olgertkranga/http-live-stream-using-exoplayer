@@ -17,7 +17,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getCanonicalName();
 
     EditText currencyRate;
+    EditText currencyRate1;
 
     ///
     SQLiteDatabaseHandler db;
@@ -52,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
     //ArrayList<Currency> currency;
     int regulator;
     ArrayList<PlayersModel> currency;
+
+    TextView tvname;
+    TextView tvcountry;
+
+    LinearLayout linearLayoutRowItemPayments;
+
+    Button pullRatesButton;
+    Button removeAllButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +90,53 @@ public class MainActivity extends AppCompatActivity {
         currencyRate = (EditText) findViewById(R.id.currencyRate);
 
         ///
+        tvname = (TextView) findViewById(R.id.name);
+        tvcountry = (TextView) findViewById(R.id.country);
+
+        ///
+        linearLayoutRowItemPayments = (LinearLayout) findViewById(R.id.linearLayoutRowItemPayments);
+
+        pullRatesButton = (Button) findViewById(R.id.pullRatesButton);;
+        removeAllButton = (Button) findViewById(R.id.removeAllButton);;
+
+        pullRatesButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    parseJson();
+
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        removeAllButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.updateCur("DELETE FROM Currency");
+
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+
+            }
+        });
+
+        ///
        //db.updateCur("DELETE FROM Currency");
 
-        try {
-            currencyRate.setInputType(InputType.TYPE_CLASS_NUMBER);
-        } catch (NullPointerException e) {
-
-        }
+        //try {
+        //    currencyRate.setInputType(InputType.TYPE_CLASS_NUMBER);
+        //} catch (NullPointerException e) {
+//
+  //      }
 
         Log.e(TAG, "REVOL_1");
         Log.e(TAG, "REVOL_2");
@@ -122,9 +173,21 @@ public class MainActivity extends AppCompatActivity {
             //};
 
             customeAdapter = new CustomeAdapter(this, currency, db);
-
             listView.setAdapter(customeAdapter);
-        }
+
+            ///
+            currencyRate1 = (EditText) findViewById(R.id.currencyRate1);
+            currencyRate1.addTextChangedListener(new EditTextWatcher());
+            ///
+            //disableTextWatcher = false;
+
+            //currencyRate.setText("1");
+            Log.e(TAG, "REVOL_CUR_RATE10: ");
+            //try {
+            //    currencyRate.addTextChangedListener(new EditTextWatcher1());
+            //} catch (NullPointerException e) {}
+
+            }
 
         if (regulator == 1) {
 
@@ -140,6 +203,26 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+
+        ///
+
+        final Handler handler = new Handler();
+        handler.postDelayed( new Runnable() {
+
+            @Override
+            public void run() {
+
+                //currencyRate.setText("1");
+                Log.e(TAG, "REVOL_CUR_RATE11: ");
+                try {
+                    currencyRate.addTextChangedListener(new EditTextWatcher1());
+                } catch (NullPointerException e) {}
+
+                handler.postDelayed( this, 1000 );
+            }
+        }, 1000 );
+
+        ///
 
   /*
         if (regulator == 1) {
@@ -163,7 +246,82 @@ public class MainActivity extends AppCompatActivity {
         }
 */
 
+
+  //////
+        /*
+        final Handler handler = new Handler();
+        handler.postDelayed( new Runnable() {
+
+            @Override
+            public void run() {
+
+                try {
+                    for (int i = 0; i < currency.size(); i++) {
+
+                        if (tvname.getText() == "EUR") {
+                            if (currency.get(i).getCurName() == "EUR") {
+                                db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate.getText() + " WHERE cur_name = 'EUR'");
+                                db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate.getText() + " WHERE cur_name <> 'EUR'");
+                            }
+                        }
+
+                        //Log.e(TAG, "REVOL_CUR: " + currency.get(i).getCurRate());
+                    }
+
+                } catch (NullPointerException e) {}
+                handler.postDelayed( this, 1000 );
+            }
+        }, 1000 );
+        */
+
+        ///
+
+        ///
+
     }
+
+    ///
+    private class EditTextWatcher1 implements TextWatcher {
+        public void afterTextChanged(Editable s) {
+            // No implementation
+            if (tvname.getText() == "EUR") {
+                db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate.getText() + " WHERE cur_name = 'EUR'");
+                db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate.getText() + " WHERE cur_name <> 'EUR'");
+            }
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // No implementation
+        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate.getText() + " WHERE cur_name = 'EUR'");
+            //db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate.getText() + " WHERE cur_name <> 'EUR'");
+            //Intent intent = getIntent();
+            //finish();
+            //startActivity(intent);
+        }
+    }
+    ///
+
+    ///
+    private class EditTextWatcher implements TextWatcher {
+        public void afterTextChanged(Editable s) {
+            // No implementation
+            db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate1.getText() + " WHERE cur_name = 'EUR'");
+            db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate1.getText() + " WHERE cur_name <> 'EUR'");
+        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // No implementation
+        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate1.getText() + " WHERE cur_name = 'EUR'");
+            //db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate1.getText() + " WHERE cur_name <> 'EUR'");
+            //Intent intent = getIntent();
+            //finish();
+            //startActivity(intent);
+        }
+    }
+    ///
 
     private void parseJson() throws IOException, JSONException {
 
