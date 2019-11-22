@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         Intent i = getIntent();
         db = new SQLiteDatabaseHandler(this);
 
-        this.setTitle("Revolut 7");
+        this.setTitle("Revolut 9");
 
         ///
         if (android.os.Build.VERSION.SDK_INT > 9) {

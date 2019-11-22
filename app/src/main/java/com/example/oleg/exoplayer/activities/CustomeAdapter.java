@@ -180,23 +180,30 @@ public class CustomeAdapter extends BaseAdapter {
 
         ///
         vh.currencyRate.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST41 = ");
-                //db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
-                //db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST46 = " + playersModelArrayList.get(positionPopup).getCurName());
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST41 = " + vh.currencyRate.getText());
+                db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
+                db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST42 = ");
-                //db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
-                //db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST42 = " + vh.currencyRate.getText());
+                //
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST45 = " + playersModelArrayList.get(positionPopup).getCurName());
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST44 = " + playersModelArrayList.get(positionPopup).getCurRate());
+                db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
+                db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                //db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
-                //db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST43 = ");
+
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST47 = " + playersModelArrayList.get(positionPopup).getCurName());
+                db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
+                db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST43 = " + vh.currencyRate.getText());
             }
         });
 
