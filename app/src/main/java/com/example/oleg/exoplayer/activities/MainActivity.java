@@ -14,13 +14,16 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getCanonicalName();
 
     EditText currencyRate;
+    //EditText currencyRate = currencyRate = (EditText) findViewById(R.id.currencyRate);
+
     EditText currencyRate1;
 
     ///
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvname;
     TextView tvcountry;
 
-    LinearLayout linearLayoutRowItemPayments;
+    RelativeLayout linearRelativeRowItemPayments;
 
     Button pullRatesButton;
     Button removeAllButton;
@@ -68,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //setContentView(R.layout.lv_item);
 
         ///
         activity = this;
@@ -87,14 +94,20 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.lv);
 
-        currencyRate = (EditText) findViewById(R.id.currencyRate);
+        //setContentView(R.layout.activity_main);
+        //currencyRate = (EditText) findViewById(R.id.currencyRate);
 
         ///
         tvname = (TextView) findViewById(R.id.name);
         tvcountry = (TextView) findViewById(R.id.country);
 
         ///
-        linearLayoutRowItemPayments = (LinearLayout) findViewById(R.id.linearLayoutRowItemPayments);
+        linearRelativeRowItemPayments = (RelativeLayout) findViewById(R.id.linearRelativeRowItemPayments);
+
+        LayoutInflater factory = getLayoutInflater();
+        View regisText = factory.inflate(R.layout.lv_item, null);
+        currencyRate = (EditText) regisText.findViewById(R.id.currencyRate);
+        //currencyRate = (EditText) linearRelativeRowItemPayments.findViewById(R.id.currencyRate);
 
         pullRatesButton = (Button) findViewById(R.id.pullRatesButton);;
         removeAllButton = (Button) findViewById(R.id.removeAllButton);;
@@ -103,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
+
+                    ///
+                    Toast.makeText(getApplicationContext(), "PULL CURRENCIES", Toast.LENGTH_LONG).show();
+
                     parseJson();
 
                     Intent intent = getIntent();
@@ -120,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
         removeAllButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(), "DELETE CURRENCIES", Toast.LENGTH_LONG).show();
+
                 db.updateCur("DELETE FROM Currency");
 
                 Intent intent = getIntent();
@@ -172,8 +192,28 @@ public class MainActivity extends AppCompatActivity {
             //    }
             //};
 
-            customeAdapter = new CustomeAdapter(this, currency, db);
+            customeAdapter = new CustomeAdapter(this, currency, db) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent){
+                    // Get the current item from ListView
+                    View view = super.getView(position,convertView,parent);
+
+                    return view;
+                }
+            };
             listView.setAdapter(customeAdapter);
+            ///
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                    Log.e(TAG, "REVOL_EDIT_TEXT_LIST2 = ");
+                    Toast.makeText(getApplicationContext(), "CURRENCY: ", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "GO TO ORDER NO." + String.valueOf(orders.get(position).getNumOrder()) + " PRODUCTS", Toast.LENGTH_LONG).show();
+
+                }
+            });
+
 
             ///
             currencyRate1 = (EditText) findViewById(R.id.currencyRate1);
@@ -195,6 +235,8 @@ public class MainActivity extends AppCompatActivity {
 
                 parseJson();
 
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
@@ -206,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
         ///
 
+/*
         final Handler handler = new Handler();
         handler.postDelayed( new Runnable() {
 
@@ -221,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed( this, 1000 );
             }
         }, 1000 );
+*/
 
         ///
 
@@ -277,23 +321,73 @@ public class MainActivity extends AppCompatActivity {
         ///
 
         ///
+        //try {
+        //currencyRate.addTextChangedListener(new EditTextWatcher1());
+        //Log.e(TAG, "REVOL_EDIT_TEXT_LIST = " + currencyRate.getText());
+
+        //currencyRate.setText(playersModelArrayList.get(0).getCurRate());
+
+        //currencyRate.addTextChangedListener(new TextWatcher() {
+
+            //if (currencyRate.hasFocus()) {
+            //    currentItem.setName(String.valueOf(s));
+            //    ((BookingDetailActivity)).updateReceiverInformation(position);
+            //    notifyDataSetChanged();
+            //}
+
+//            // the user's changes are saved here
+//            public void onTextChanged(CharSequence c, int start, int before, int count) {
+//                //mCrime.setTitle(c.toString());
+//                Log.e(TAG, "REVOL_EDIT_TEXT_LIST 105");
+//            }
+//
+//            public void beforeTextChanged(CharSequence c, int start, int count, int after) {
+//                // this space intentionally left blank
+//                Log.e(TAG, "REVOL_EDIT_TEXT_LIST 106");
+//            }
+//
+//            public void afterTextChanged(Editable c) {
+//                Log.e(TAG, "REVOL_EDIT_TEXT_LIST 106");
+//                // this one too
+//            }
+//        });
+
+        //} catch (NullPointerException e) {
+//
+//            Log.e(TAG, "REVOL_EDIT_TEXT_LIST1 = ");
+//
+//        }
 
     }
 
     ///
     private class EditTextWatcher1 implements TextWatcher {
+
+        LayoutInflater factory = getLayoutInflater();
+        View regisText = factory.inflate(R.layout.lv_item, null);
+        EditText currencyRate = (EditText) regisText.findViewById(R.id.currencyRate);
+
         public void afterTextChanged(Editable s) {
             // No implementation
-            if (tvname.getText() == "EUR") {
+            //if (tvname.getText() == "EUR") {
+
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST41 = " + currencyRate.getText());
                 db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate.getText() + " WHERE cur_name = 'EUR'");
                 db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate.getText() + " WHERE cur_name <> 'EUR'");
-            }
+
+            //}
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            Log.e(TAG, "REVOL_EDIT_TEXT_LIST42 = " + currencyRate.getText());
+            db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate.getText() + " WHERE cur_name = 'EUR'");
+            db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate.getText() + " WHERE cur_name <> 'EUR'");
             // No implementation
         }
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            Log.e(TAG, "REVOL_EDIT_TEXT_LIST43 = " + currencyRate.getText());
+            db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate.getText() + " WHERE cur_name = 'EUR'");
+            db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate.getText() + " WHERE cur_name <> 'EUR'");
             //db.updateCur("UPDATE Currency SET cur_rate = " + currencyRate.getText() + " WHERE cur_name = 'EUR'");
             //db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + currencyRate.getText() + " WHERE cur_name <> 'EUR'");
             //Intent intent = getIntent();
@@ -370,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onTaskCompleted(String response, int serviceCode) {
 
-        Log.d("responsejson", response.toString());
+        Log.d("responsejson3", response.toString());
 
         switch (serviceCode) {
             case jsoncode:
@@ -418,20 +512,23 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("PARSIK_1668 = ", playersModelArrayList.get(1).getCurDesc());
 
                         PlayersModel currency = new PlayersModel(
-                                        "2019-11-18", //2
+                                "2019-11-18", //2
                                 playersModelArrayList.get(i).getCurName(), //3
                                 playersModelArrayList.get(i).getCurRate(), //4
                                 playersModelArrayList.get(i).getCurDesc(),
-                                        ""
-                                );
+                                ""
+                        );
 
                         db.addNewCurrency(currency);
 
                     }
 
+
                 }else {
                     Toast.makeText(MainActivity.this, parseContent.getErrorCode(response), Toast.LENGTH_SHORT).show();
                 }
+
+
         }
     }
 
