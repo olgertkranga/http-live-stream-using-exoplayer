@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static android.content.ContentValues.TAG;
+
 public class MainActivity extends AppCompatActivity {
 
     private ParseContent parseContent;
@@ -203,17 +205,18 @@ public class MainActivity extends AppCompatActivity {
             };
             listView.setAdapter(customeAdapter);
             ///
+            /*
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                    Log.e(TAG, "REVOL_EDIT_TEXT_LIST2 = ");
-                    Toast.makeText(getApplicationContext(), "CURRENCY: ", Toast.LENGTH_LONG).show();
-                    //Toast.makeText(getApplicationContext(), "GO TO ORDER NO." + String.valueOf(orders.get(position).getNumOrder()) + " PRODUCTS", Toast.LENGTH_LONG).show();
+                    ///orders.get(position).getRef()
+                    Log.e(TAG, "REVOL_EDIT_TEXT_LIST56 = " + playersModelArrayList.get(position).getCurName());
+                    Log.e(TAG, "REVOL_EDIT_TEXT_LIST57 = " + playersModelArrayList.get(position).getCurRate());
+                    Log.e(TAG, "REVOL_EDIT_TEXT_LIST58 = " + playersModelArrayList.get(position).getCurDesc());
 
                 }
-            });
-
+            });*/
 
             ///
             currencyRate1 = (EditText) findViewById(R.id.currencyRate1);

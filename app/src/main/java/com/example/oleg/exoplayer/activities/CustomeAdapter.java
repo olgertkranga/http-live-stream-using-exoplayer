@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.oleg.exoplayer.R;
@@ -178,7 +180,6 @@ public class CustomeAdapter extends BaseAdapter {
 
         final int positionPopup = position;
 
-        ///
         vh.currencyRate.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -204,8 +205,18 @@ public class CustomeAdapter extends BaseAdapter {
                 db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
                 db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
                 Log.e(TAG, "REVOL_EDIT_TEXT_LIST43 = " + vh.currencyRate.getText());
+
+                //playersModelArrayList.get(positionPopup).setCurDesc(editable.toString());
+                //playersModelArrayList.get(positionPopup).setCurDesc(editable.toString());
+
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST49 = " + playersModelArrayList.get(positionPopup).getCurName());
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST50 = " + playersModelArrayList.get(positionPopup).getCurRate());
+                Log.e(TAG, "REVOL_EDIT_TEXT_LIST51 = " + playersModelArrayList.get(positionPopup).getCurDesc());
+
             }
         });
+
+        ///
 
         return  row;
     }
