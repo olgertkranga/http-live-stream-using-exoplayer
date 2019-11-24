@@ -4,12 +4,8 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.example.oleg.exoplayer.activities.ParseContent;
 import com.example.oleg.exoplayer.activities.PlayersModel;
-import com.example.oleg.exoplayer.models.Currency;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +34,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     public SQLiteDatabaseHandler(Activity context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
-    //public SQLiteDatabaseHandler(Context context) {
-    //    super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    //}
 
     // Creating Tables
     @Override

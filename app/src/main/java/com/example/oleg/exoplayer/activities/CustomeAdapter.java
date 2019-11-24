@@ -1,41 +1,28 @@
 package com.example.oleg.exoplayer.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.oleg.exoplayer.R;
 import com.example.oleg.exoplayer.db.SQLiteDatabaseHandler;
-import com.example.oleg.exoplayer.models.Currency;
-
 import java.security.AccessControlContext;
 import java.util.ArrayList;
-
 import static android.content.ContentValues.TAG;
-
 
 public class CustomeAdapter extends BaseAdapter {
 
-    //private Activity context;
-    public ArrayList<Currency> currency;
     SQLiteDatabaseHandler db;
 
     private Activity context;
-    //private Context context;
+        private ArrayList<PlayersModel> playersModelArrayList;
 
-    private ArrayList<PlayersModel> playersModelArrayList;
-
-    ///
     ViewHolder vh;
 
     public CustomeAdapter(Activity context, ArrayList<PlayersModel> playersModelArrayList, SQLiteDatabaseHandler db) {
@@ -47,103 +34,13 @@ public class CustomeAdapter extends BaseAdapter {
     public CustomeAdapter(AccessControlContext accessControlContext, ArrayList<PlayersModel> playersModelArrayList) {
     }
 
-    //public CustomeAdapter(Context context, ArrayList<PlayersModel> playersModelArrayList) {
-    //    this.context = context;
-    //    this.playersModelArrayList = playersModelArrayList;
-    //}
-
     public static class ViewHolder {
 
         TextView tvname;
         EditText currencyRate;
         TextView tvcountry;
 
-        //protected TextView tvname, currencyRate, tvcountry;
-        //protected TextView tvname, tvcountry, tvcity;
     }
-
-    /*
-    @Override
-    public int getViewTypeCount()
-    {
-
-        if(getCount() > 0){
-            return getCount();
-        }else{
-            return super.getViewTypeCount();
-        }
-
-        //return getCount();
-    } */
-
-/*
-    @Override
-    public int getItemViewType(int position) {
-
-        return position;
-    }
-
-    @Override
-    public int getCount()
-    {
-        //try {
-            return playersModelArrayList.size();
-        //}
-        //catch (NullPointerException e) {
-        //    return 0;
-        //}
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return playersModelArrayList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-*/
-
-
-
-/*
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            holder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.lv_item, null, true);
-            holder.tvname = (TextView) convertView.findViewById(R.id.name);
-            holder.currencyRate = (EditText) convertView.findViewById(R.id.currencyRate);
-            holder.tvcountry = (TextView) convertView.findViewById(R.id.country);
-            //holder.tvcity = (TextView) convertView.findViewById(R.id.city);
-
-           convertView.setTag(holder);
-        }else {
-            // the getTag returns the viewHolder object set as a tag to the view
-            holder = (ViewHolder)convertView.getTag();
-        }
-
-        holder.tvname.setText(playersModelArrayList.get(position).getCurName());
-        holder.currencyRate.setText(String.valueOf(playersModelArrayList.get(position).getCurRate()));
-        holder.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
-
-        //holder.currencyRate.setText(currency.get(position).getCurRate());
-        //holder.tvname.setText(playersModelArrayList.get(position).getCurName() + "                  " + playersModelArrayList.get(position).getCurRate());
-        //holder.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
-
-        /*
-        holder.tvname.setText("Name: "+playersModelArrayList.get(position).getName());
-        holder.tvcountry.setText("Country: "+playersModelArrayList.get(position).getCountry());
-        holder.tvcity.setText("City: "+playersModelArrayList.get(position).getCity());
-        */
-/*
-        return convertView;
-    }
-    */
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -151,8 +48,6 @@ public class CustomeAdapter extends BaseAdapter {
 
         LayoutInflater inflater = context.getLayoutInflater();
 
-        ///
-        ///ViewHolder vh;
         if (convertView == null) {
             vh = new ViewHolder();
 
@@ -174,9 +69,6 @@ public class CustomeAdapter extends BaseAdapter {
         vh.tvname.setText(playersModelArrayList.get(position).getCurName());
         vh.currencyRate.setText(String.valueOf(playersModelArrayList.get(position).getCurRate()));
         vh.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
-        //holder.tvname.setText(playersModelArrayList.get(position).getCurName());
-        //holder.currencyRate.setText(String.valueOf(playersModelArrayList.get(position).getCurRate()));
-        //holder.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
 
         final int positionPopup = position;
 
@@ -184,39 +76,32 @@ public class CustomeAdapter extends BaseAdapter {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST46 = " + playersModelArrayList.get(positionPopup).getCurName());
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST41 = " + vh.currencyRate.getText());
-                db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
-                db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.e(TAG, "REVOL_EDIT_TEXT_LIST42 = " + vh.currencyRate.getText());
                 //
                 Log.e(TAG, "REVOL_EDIT_TEXT_LIST45 = " + playersModelArrayList.get(positionPopup).getCurName());
                 Log.e(TAG, "REVOL_EDIT_TEXT_LIST44 = " + playersModelArrayList.get(positionPopup).getCurRate());
+
+            if (playersModelArrayList.get(positionPopup).getCurName() == "EUR") {
                 db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
-                db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
+                db.updateCur("UPDATE Currency SET cur_rate = (cur_rate * " + vh.currencyRate.getText() + ") WHERE cur_name <> 'EUR'");
+            } else {
+                db.updateCur("UPDATE Currency SET cur_rate = (cur_rate /" + vh.currencyRate.getText() + ") WHERE cur_name = 'EUR'");
+                String numStr;
+                numStr = vh.currencyRate.getText().toString();
+                db.updateCur("UPDATE Currency SET cur_rate = (cur_rate * ("+ numStr +"/(SELECT cur_rate FROM Currency WHERE cur_name = 'EUR'))) WHERE cur_name <> 'EUR'");
             }
+
+            }
+
             @Override
             public void afterTextChanged(Editable editable) {
-
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST47 = " + playersModelArrayList.get(positionPopup).getCurName());
-                db.updateCur("UPDATE Currency SET cur_rate = " + vh.currencyRate.getText() + " WHERE cur_name = 'EUR'");
-                db.updateCur("UPDATE Currency SET cur_rate = cur_rate * " + vh.currencyRate.getText() + " WHERE cur_name <> 'EUR'");
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST43 = " + vh.currencyRate.getText());
-
-                //playersModelArrayList.get(positionPopup).setCurDesc(editable.toString());
-                //playersModelArrayList.get(positionPopup).setCurDesc(editable.toString());
-
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST49 = " + playersModelArrayList.get(positionPopup).getCurName());
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST50 = " + playersModelArrayList.get(positionPopup).getCurRate());
-                Log.e(TAG, "REVOL_EDIT_TEXT_LIST51 = " + playersModelArrayList.get(positionPopup).getCurDesc());
-
             }
-        });
 
-        ///
+        });
 
         return  row;
     }

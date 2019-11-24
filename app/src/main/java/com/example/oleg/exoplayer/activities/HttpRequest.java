@@ -1,8 +1,5 @@
 package com.example.oleg.exoplayer.activities;
 
-/**
- * Created by Olegs
- */
 import android.util.Log;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,27 +16,6 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-//import javax.net.ssl.HttpsURLConnection;
-
-/**
- * Since HttpClient,BasicNameValuePairs, etc...  are deprecated.
- * I've searched for a good alternative, and couldn't find any. Eventually ended up writing my own solution, so I decided to share to those who needs it.
- * Main goals: to make it intuitive, short, clean and reasonable.
- * NOTE methods: .prepare(), preparePost(), withData(map) & withData(string) are build to allow caller to chain in different variations, examples:
- *HttpRequest req=new HttpRequest("http://host:port/path");
- *
- *Example 1: //prepare Http Post request and send to "http://host:port/path" with data params name=Bubu and age=29, return true - if worked
- *req.preparePost().withData("name=Bubu&age=29").send();
- *
- *Example 2: //prepare http get request,  send to "http://host:port/path" and read server's response as String
- *req.prepare().sendAndReadString();
- *
- *Example 3: //prepare Http Post request and send to "http://host:port/path" with name=Bubu and age=29 and read server's response as JSONObject
- *HashMap<String, String>params=new HashMap<>();
- params.put("name", "Groot");
- params.put("age", "29");
- *req.preparePost().withData(params).sendAndReadJSON();
- */
 public class HttpRequest {
     //Supported HttpRequest methods
     public static enum Method{
@@ -47,18 +23,18 @@ public class HttpRequest {
     }
     private URL url;
 
-    //private HttpsURLConnection con;
     private HttpURLConnection con;
 
     private OutputStream os;
+
     //After instantiation, when opening connection - IOException can occur
     public HttpRequest(URL url)throws IOException{
         this.url=url;
 
-        //con = (HttpsURLConnection)this.url.openConnection();
         con = (HttpURLConnection)this.url.openConnection();
 
     }
+
     //Can be instantiated with String representation of url, force caller to check for IOException which can be thrown
     public HttpRequest(String url)throws IOException{ this(new URL(url)); Log.d("parameters", url); }
 
@@ -76,12 +52,14 @@ public class HttpRequest {
             os = con.getOutputStream();
         }
     }
+
     //prepare request in GET method
     //@return HttpRequest this instance -> for chaining method @see line 22
     public HttpRequest prepare() throws IOException{
         prepareAll(Method.GET);
         return this;
     }
+
     /**
      * Prepares HttpRequest method with for given method, possible values: HttpRequest.Method.POST,
      * HttpRequest.Method.PUT, HttpRequest.Method.GET & HttpRequest.Method.DELETE
@@ -94,6 +72,7 @@ public class HttpRequest {
         prepareAll(method);
         return this;
     }
+
     /**
      * Adding request headers (standard format "Key":"Value")
      *
@@ -121,6 +100,7 @@ public class HttpRequest {
         writer.close();
         return this;
     }
+
     /**
      * Builds query on format of key1=v1&key2=v2 from given hashMap structure
      * for map: {name=Bubu, age=29} -> builds "name=Bubu&age=29"
@@ -143,6 +123,7 @@ public class HttpRequest {
     public int send() throws IOException{
         return con.getResponseCode(); //return HTTP status code to indicate whether it successfully sent
     }
+
     /**
      * Sending request to the server and pass to caller String as it received in response from server
      *
@@ -156,6 +137,7 @@ public class HttpRequest {
         Log.d("ressss",response.toString());
         return response.toString();
      }
+
     /**
      * Sending request to the server and pass to caller its raw contents in bytes as it received from server.
      *
@@ -169,6 +151,7 @@ public class HttpRequest {
         for (int bytesRead;(bytesRead=is.read(buffer))>=0;)output.write(buffer, 0, bytesRead);
         return output.toByteArray();
     }
+
     //JSONObject representation of String response from server
     public JSONObject sendAndReadJSON() throws JSONException, IOException{
         return new JSONObject(sendAndReadString());

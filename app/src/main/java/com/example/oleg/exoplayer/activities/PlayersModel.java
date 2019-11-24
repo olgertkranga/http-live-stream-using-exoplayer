@@ -11,9 +11,6 @@ public class PlayersModel {
     private String curDesc; //
     private String curUrlFlag;
 
-
-
-
     ///
     public PlayersModel(
             String rateDate, //2
@@ -32,9 +29,7 @@ public class PlayersModel {
     }
 
     public PlayersModel() {
-
     }
-
 
     public long getCurID() {
         return curID;
@@ -92,31 +87,4 @@ public class PlayersModel {
         this.curUrlFlag = curUrlFlag;
     }
 
-    //private String name, country, city;
-
-    /*
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-    */
 }
