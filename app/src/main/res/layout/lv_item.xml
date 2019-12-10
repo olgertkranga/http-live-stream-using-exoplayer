@@ -1,5 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/linearRelativeRowItemPayments"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+
+            tools:text="GBP" />
+
+        <TextView
+            android:id="@+id/country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="4dp"
+
+            tools:text="British Pound" />
+
+        <!-- android:src="@drawable/chf_flag" -->
+        <ImageView
+        android:id="@+id/currency_flag"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="16dp"
+
+        android:layout_marginTop="16dp"
+
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"/>
+
+        <EditText
+        android:id="@+id/currencyRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="100dp"
+        android:inputType="numberDecimal"
+        android:textSize="12dp"
+
+        />
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical" android:layout_width="match_parent"
         android:id="@+id/linearRelativeRowItemPayments"
@@ -11,11 +74,12 @@
         android:background="#000"
         android:orientation="vertical">
 
-        <!--
+
         android:focusable="false"
         android:focusableInTouchMode="false"
         -->
 
+<!--
          <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
@@ -30,8 +94,12 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingLeft="10dp"
             android:text="" />
+-->
 
         <!-- currencyRate  android:singleLine="true"  android:imeOptions="actionSend" android:inputType="number" -->
+
+   <!--
+
         <EditText
         android:id="@+id/currencyRate"
         android:layout_width="match_parent"
@@ -62,6 +130,8 @@
             android:paddingLeft="10dp"
             android:text="" />
 
+-->
+
         <!--
         <TextView
             android:id="@+id/city"
@@ -73,8 +143,9 @@
             android:paddingLeft="10dp"
             android:text="City" />
             -->
-
+<!--
     </LinearLayout>
+-->
 
 
 <!--
@@ -86,5 +157,6 @@
         android:layout_marginRight="10dp"
         android:background="@color/colorAccent"/>
         -->
-
+<!--
 </RelativeLayout>
+-->

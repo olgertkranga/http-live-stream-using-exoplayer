@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.oleg.exoplayer.R;
 import com.example.oleg.exoplayer.db.SQLiteDatabaseHandler;
@@ -40,6 +41,9 @@ public class CustomeAdapter extends BaseAdapter {
         EditText currencyRate;
         TextView tvcountry;
 
+        ///
+        ImageView currency_flag_ImageView;
+
     }
 
     @Override
@@ -57,6 +61,8 @@ public class CustomeAdapter extends BaseAdapter {
             vh.currencyRate = (EditText) row.findViewById(R.id.currencyRate);
             vh.tvcountry = (TextView) row.findViewById(R.id.country);
 
+            vh.currency_flag_ImageView = (ImageView) row.findViewById(R.id.currency_flag);
+
             // store the holder with the view.
             row.setTag(vh);
 
@@ -69,6 +75,17 @@ public class CustomeAdapter extends BaseAdapter {
         vh.tvname.setText(playersModelArrayList.get(position).getCurName());
         vh.currencyRate.setText(String.valueOf(playersModelArrayList.get(position).getCurRate()));
         vh.tvcountry.setText(playersModelArrayList.get(position).getCurDesc());
+
+        ///
+        ///
+        if (vh.tvname.getText().toString().equals("AUD")) {
+            //android:src="@drawable/chf_flag"
+            //vh.currency_flag_ImageView.set
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.aud_flag);
+        } else {
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.eur_flag);
+        }
+        ///
 
         final int positionPopup = position;
 
