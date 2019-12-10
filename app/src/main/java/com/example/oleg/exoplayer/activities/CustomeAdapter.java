@@ -79,9 +79,21 @@ public class CustomeAdapter extends BaseAdapter {
         ///
         ///
         if (vh.tvname.getText().toString().equals("AUD")) {
-            //android:src="@drawable/chf_flag"
-            //vh.currency_flag_ImageView.set
             vh.currency_flag_ImageView.setBackgroundResource(R.drawable.aud_flag);
+        }else if (vh.tvname.getText().toString().equals("BGN")) {
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.bgn_flag);
+        }else if (vh.tvname.getText().toString().equals("BRL")) {
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.brl_flag);
+        }else if (vh.tvname.getText().toString().equals("CAD")) {
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.cad_flag);
+        }else if (vh.tvname.getText().toString().equals("CHR")) {
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.chf_flag);
+        }else if (vh.tvname.getText().toString().equals("CNY")) {
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.cny_flag);
+        }else if (vh.tvname.getText().toString().equals("CZK")) {
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.czk_flag);
+        }else if (vh.tvname.getText().toString().equals("DKK")) {
+            vh.currency_flag_ImageView.setBackgroundResource(R.drawable.dkk_flag);
         } else {
             vh.currency_flag_ImageView.setBackgroundResource(R.drawable.eur_flag);
         }
