@@ -86,7 +86,7 @@ public class CustomeAdapter extends BaseAdapter {
             vh.currency_flag_ImageView.setBackgroundResource(R.drawable.brl_flag);
         }else if (vh.tvname.getText().toString().equals("CAD")) {
             vh.currency_flag_ImageView.setBackgroundResource(R.drawable.cad_flag);
-        }else if (vh.tvname.getText().toString().equals("CHR")) {
+        }else if (vh.tvname.getText().toString().equals("CHF")) {
             vh.currency_flag_ImageView.setBackgroundResource(R.drawable.chf_flag);
         }else if (vh.tvname.getText().toString().equals("CNY")) {
             vh.currency_flag_ImageView.setBackgroundResource(R.drawable.cny_flag);
